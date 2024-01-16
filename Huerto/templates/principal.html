@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        {% block link_css %}
+
+        {%endblock%}
+
+
+        {% block cabecera_extra%}
+            {% load static %}
+            <link rel="stylesheet" href="css/estilo.css">
+            <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
+        <script src="{% static 'javascript/javascript1.js'%}"></script>
+        
+            {% load bootstrap5 %}
+            {% bootstrap_css %}
+            {%bootstrap_javascript%}
+            {%load bootstrap_icons%}
+                <script type="text/javascript" src="{% static 'javascript/javascript1.js'%}"></script>
+        {% endblock%}
+        
+    </head>
+    <body>
+        <div><a href="{% url 'huertos_lista_api'%}">Lista huerto</a></div>
+    
+
+        Fecha Inicio:
+    </br>
+
+    </p>
+    <div class="ml-2">
+    
+
+        
+
+        
+
+        
+
+
+
+
+    </div>
+    
+        {%include "nav.html"%}
+        {%block cabecera%}
+            <p>Esto es el bloco de la cabecera</P>
+        {%endblock%}
+
+        {%block contenido%}
+            <p>Este es el block del contenido </p>
+        {%endblock%}
+
+        <img src="{%static 'imagenes/Diagrama ER huerto.JPG'%}" alt="...">
+        {%include "pie.html"%}
+    </body>

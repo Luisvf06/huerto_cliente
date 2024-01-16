@@ -1,0 +1,12 @@
+{%extends 'principal.html'%}
+{%block contenido%}
+    <h1 class= "display-3">Lista de huertos </h1>
+    {% for huerto in huertos_mostrar%}
+        <p>ubicacion: {{huerto.ubicacion}}</p>
+        <p>sitio{{huerto.sitio}} </p>
+        <p>sustrato {{huerto.sustrato}}</p>
+        <p>area {{huerto.area}}</p>
+        <p>acidez {{huerto.acidez}}</p>
+        <p>abonado {{huerto.abonado}}</p>
+    {%endfor%}
+{%endblock%}
