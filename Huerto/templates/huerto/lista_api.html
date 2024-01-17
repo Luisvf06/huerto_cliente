@@ -8,5 +8,8 @@
         <p>area {{huerto.area}}</p>
         <p>acidez {{huerto.acidez}}</p>
         <p>abonado {{huerto.abonado}}</p>
+        {% for usuario in huerto.usuario %}
+            <p> usuario {{usuario.username}}</p>
+        {% endfor %}
     {%endfor%}
 {%endblock%}
