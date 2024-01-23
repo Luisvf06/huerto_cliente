@@ -7,7 +7,9 @@ def index(request):
     return render(request,'index.html')
 
 def huertos_lista_api(request):
-    response = requests.get('http://127.0.0.1:8080/api/v1/huertos')
+    headers={'Authorization': 'Bearer OjSzCkAWynmruDYbzT7MV4QAmavcV9'}
+    response = requests.get('http://127.0.0.1:4999/api/v1/huertos',headers=headers)
     
     huertos=response.json()
     return render(request,'huerto/lista_api.html',{'huertos_mostrar':huertos})
+
