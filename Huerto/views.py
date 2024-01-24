@@ -38,7 +38,7 @@ def huerto_buscar_cl(request):
     
     if formulario.is_valid():
         headers= crear_cabecera()
-        response = requests.get('http://127.0.0.1:4999/api/v1/huertos',headers=headers,params=formulario.data)
+        response = requests.get('http://127.0.0.1:4999/api/v1/huerto_busqueda_simple',headers=headers,params=formulario.data)#en api/v1 antes estaba huertos pero devolvia toda la lista en lugar de las coincidencias, ahora no devuelve nada
         huertos = response.json()
         
         return render(request, 'huerto/lista_api.html',{"huertos_mostrar":huertos})
