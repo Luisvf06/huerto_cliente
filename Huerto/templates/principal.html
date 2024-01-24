@@ -8,6 +8,14 @@
 
 
         {% block cabecera_extra%}
+        {%block busqueda%}
+<form action = "{% url 'huerto_buscar' %}" class="d-flex mt-3" role="search" method="GET">
+    <input name="textoBusqueda" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+    <button class="btn btn-light btn-outline-dark" type="submit">Search </button>
+</form>
+{%endblock%}
+
+
             {% load static %}
             <link rel="stylesheet" href="css/estilo.css">
             <link rel="stylesheet" href="{% static 'css/estilo.css' %}">
