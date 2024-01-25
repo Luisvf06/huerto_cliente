@@ -1,0 +1,37 @@
+{%extends "principal.html"%}
+
+{%block contenido%}
+    
+    <form action="{url 'huerto_buscar_avanzada'%}"method="GET">
+        {% csrf_token %}
+        {%block busqueda%}
+        <div>
+            {% formulario.textoBusqueda show_label=True%}
+        </div>
+
+        <div>
+            {% formulario.sustrato show_label=True%}
+        </div>
+
+        <div>
+            {% formulario.sitio show_label=True%}
+        </div>
+
+        <div>
+            {% formulario.area_minima show_label=True%}
+        </div>
+
+        <div>
+            {% formulario.area_maxima show_label=True%}
+        </div>
+
+        <div>
+            {% formulario.abonado show_label=True%}
+        </div>
+    
+        <div>
+            {% formulario.ubicacion show_label=True%}
+        </div>
+        {%endblock%}
+    </form>
+    {%endblock%}
