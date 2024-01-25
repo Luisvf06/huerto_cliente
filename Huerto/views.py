@@ -75,7 +75,7 @@ def huerto_buscar_avanzada(request):
             return mi_error_500(request)
     else:
         formulario=BusquedaAvanzadaHuerto(None)
-        return render(request, 'huerto/busqueda_avanzada.html',{"formulario":formulario})
+        return render(request, 'busqueda_avanzada.html',{"formulario":formulario})
 
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
