@@ -20,7 +20,7 @@ import requests
 
 import os
 from pathlib import Path
-
+from requests.exceptions import HTTPError
 
 def index(request):
     return render(request,'index.html')
@@ -47,7 +47,7 @@ def huerto_buscar_cl(request):
     else:
         return redirect("index.html")
     
-from requests.exceptions import HTTPError
+
 def huerto_buscar_avanzada(request):
     if(len(request.GET)>0):
         formulario=BusquedaAvanzadaHuerto(request.GET)
@@ -55,7 +55,8 @@ def huerto_buscar_avanzada(request):
         try:
             headers=crear_cabecera()
             response=requests.get('http://127.0.0.1:4999/api/v1/huerto_busqueda_avanzada',headers=headers,params=formulario.data)#huerto_busqueda_avanzada es el nombre que va en el archivo api_urls.py de servidor
-            if(response.status.code==request.codes.ok):
+            if response.status_code == 200:
+
                 huertos=response.json()
                 return render(request,'huerto/lista_mejorada.html',{"huertos_mostrar":huertos})#tengo que crear la plantilla lista mejorada
             else:
@@ -63,7 +64,7 @@ def huerto_buscar_avanzada(request):
                 response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion:{http_err}')
-            if(http_err==400):
+            if(response.status_code==400):
                 errores=response.json()
                 for error in errores:
                     formulario.add_error(error,errores[error])
@@ -75,7 +76,7 @@ def huerto_buscar_avanzada(request):
             return mi_error_500(request)
     else:
         formulario=BusquedaAvanzadaHuerto(None)
-        return render(request, 'busqueda_avanzada.html',{"formulario":formulario})
+        return render(request, 'huerto/busqueda_avanzada.html',{"formulario":formulario})
 
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)

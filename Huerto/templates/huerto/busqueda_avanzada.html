@@ -1,0 +1,33 @@
+{%extends "principal.html"%}
+
+{% block contenido %}
+{% load bootstrap5 %}
+    <form action="{% url 'huerto_buscar_avanzada' %}" method="GET">
+        {% csrf_token %}
+
+        <div>
+            {% bootstrap_field formulario.sustrato show_label=True %}
+        </div>
+
+        <div>
+            {% bootstrap_field formulario.sitio show_label=True %}
+        </div>
+
+        <div>
+            {% bootstrap_field formulario.area_minima show_label=True %}
+        </div>
+
+        <div>
+            {% bootstrap_field  formulario.area_maxima  show_label=True %}
+        </div>
+
+        <div>
+            {% bootstrap_field formulario.abonado show_label=True %}
+        </div>
+    
+        <div>
+            {% bootstrap_field  formulario.ubicacion  show_label=True %}
+        </div>
+        <button type="submit">Enviar</button>
+    </form>
+{% endblock %}
