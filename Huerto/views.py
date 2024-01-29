@@ -25,13 +25,31 @@ from requests.exceptions import HTTPError
 def index(request):
     return render(request,'index.html')
 def crear_cabecera():
-    return {'Authorization': 'Bearer OjSzCkAWynmruDYbzT7MV4QAmavcV9'}
+    return {'Authorization': 'Bearer rym15d5na7hpGWtUXgNOncq1OfGTkh'}
 def huertos_lista_api(request):
-    headers={'Authorization': 'Bearer OjSzCkAWynmruDYbzT7MV4QAmavcV9'}
+    headers={'Authorization': 'Bearer PqKT5fQeiXpL5TPFZcsDBaCAkSgdVQ'}
     response = requests.get('http://127.0.0.1:4999/api/v1/huertos',headers=headers)
     
     huertos=response.json()
     return render(request,'huerto/lista_api.html',{'huertos_mostrar':huertos})
+
+def huertos_lista_mejorada(request):
+    headers={'Authorization': 'Bearer PqKT5fQeiXpL5TPFZcsDBaCAkSgdVQ'}
+    response = requests.get('http://127.0.0.1:4999/api/v1/huertos_mejorada',headers=headers)
+    huertos=response.json()
+    return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
+
+def Gastos_lista_mejorada(request):
+    headers={'Authorization': 'Bearer vwT0f2nGyaNXl6kFDLynuicsBZQTB1'}
+    response= requests.get('http://127.0.0.1:4999/api/v1/gastos')
+    gastos=response.json()
+    return render(request,'gasto/lista_mejorada.html',{'gastos_mostrar':gastos})
+
+def Blog_lista_mejorada(request):
+    headers={'Authorization': 'Bearer rym15d5na7hpGWtUXgNOncq1OfGTkh'}
+    response=requests.get('http://127.0.0.1:4999/api/v1/blogs')
+    blogs=response.json()
+    return render(request,'blog/lista_mejorada.html',{'blogs_mostrar':blogs})
 
 def huerto_buscar_cl(request):
     formulario=BusquedaHuerto(request.GET)

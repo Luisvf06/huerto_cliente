@@ -1,0 +1,20 @@
+{%extends 'principal.html'%}
+{%block contenido%}
+    <h1 class= "display-3">Lista de huertos </h1>
+    {% for gasto in gastos_mostrar%}
+        <h2>Gasto: {{gasto.id}}</h2>
+        <p>facturas: {{gasto.facturas}}</p>
+        <p>Imprevistos{{gasto.imprevistos}} </p>
+        <p>Descrpicion {{gasto.Descripcion}}</p>
+        <p>fecha: {{gasto.fecha}}</p>
+
+
+        {% for usuario in gasto.usuario %}
+            <p> usuario {{usuario.username}}</p>
+            {% empty %}
+                No hay datos
+        {% endfor %}
+        {% empty %}
+        No hay datos
+    {%endfor%}
+{%endblock%}

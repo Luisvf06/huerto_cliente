@@ -1,0 +1,16 @@
+{%extends 'principal.html'%}
+{%block contenido%}
+    <h1 class= "display-3">Lista de huertos </h1>
+    {% for blog in blogs_mostrar%}
+        <h2>blog: {{blog.id}}</h2>
+        <p>etiqueta: {{blog.etiqueta}}</p>
+        <p>fecha: {{blog.fecha}}</p>
+        {% for usuario in blog.usuario %}
+            <p> usuario {{usuario.username}}</p>
+            {% empty %}
+                No hay datos
+        {% endfor %}
+        {% empty %}
+        No hay datos
+    {%endfor%}
+{%endblock%}
