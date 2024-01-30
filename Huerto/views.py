@@ -25,7 +25,8 @@ from requests.exceptions import HTTPError
 def index(request):
     return render(request,'index.html')
 def crear_cabecera():
-    return {'Authorization': 'Bearer rym15d5na7hpGWtUXgNOncq1OfGTkh'}
+    return {'Authorization': 'Bearer' + env("CLAVE_ADMINISTRADOR"),
+            "Content-Type":"application/json"}
 def huertos_lista_api(request):
     headers={'Authorization': 'Bearer PqKT5fQeiXpL5TPFZcsDBaCAkSgdVQ'}
     response = requests.get('http://127.0.0.1:4999/api/v1/huertos',headers=headers)
