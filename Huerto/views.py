@@ -2,8 +2,8 @@ from django.shortcuts import render,redirect
 from .forms import *
 # Create your views here.
 #Vistas API
-
-
+from .helper import helper
+import json
 import requests
 import environ
 import os
@@ -96,6 +96,44 @@ def huerto_buscar_avanzada(request):
         formulario=BusquedaAvanzadaHuerto(None)
         return render(request, 'huerto/busqueda_avanzada.html',{"formulario":formulario})
 
+def huerto_crear(request):
+    if(request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers= {
+                "Content-Type": "application/json"
+            }
+            datos=formulario.data.copy()
+            datos["usuarios"]= request.POST.getlist("usuarios");
+            response=requests.post(
+                'http://127.0.0.1:4999/api/v1/huertos/crear',
+                headers=headers,
+                data=json.dumps(datos)
+            )
+            if(response.status_code == requests.codes.ok):
+                return redirect("huerto_lista")
+            else:
+                print(response.status.code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,
+                            'huerto/crear_huerto.html',
+                            {"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+        
+        else:
+            formulario = HuertoForm(None)
+        return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
+        
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from .models import *
 from datetime import date
 import datetime
+from .helper import helper
 
 
 class BusquedaHuerto(forms.Form):
@@ -34,3 +35,38 @@ class BusquedaAvanzadaHuerto(forms.Form):
 
     ubicacion = forms.CharField(label="Ubicación",required=False,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
+class HuertoForm(forms.Form):#formulario de crear
+    SITIO=[
+        ("M","maceta"),
+        ("J","jardin"),
+        ("T","terraza"),
+        ("P","parcela"),
+    ]
+    sitio= forms.ChoiceField(choices=SITIO,widget=forms.CheckboxSelectMultiple())
+    SUSTRATO=[
+        ("ARE","arenoso"),
+        ("ARC","arcilloso"),
+        ("LIM","limoso"),
+        ("FRA","franco"),
+        ("TUR","turbado"),
+    ]
+    sustrato=forms.ChoiceField(choices=SUSTRATO,required=True,widget=forms.CheckboxSelectMultiple())
+
+    area_minima=forms.FloatField(label="Área mínima",required=True)
+    
+    area_maxima=forms.FloatField(label="Área máxima",required=True)
+    
+    abonado=forms.BooleanField(required=True)
+
+    ubicacion = forms.CharField(label="Ubicación",required=True,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
+
+    
+    def __init__(self, *args, **kwargs):
+        super(HuertoForm,self).__init__(*args,**kwargs)
+        
+        usuariosDisponibles = helper.obtener_usuarios_select()
+        self.fields["usuario"]=forms.ChoiceField(
+            choices=usuariosDisponibles,
+            widget=forms.Select,
+            required=True
+        )
