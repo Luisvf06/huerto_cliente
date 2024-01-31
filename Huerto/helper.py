@@ -9,7 +9,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 class helper:
     def obtener_usuarios_select():
-        response=requests.get('http://127.0.0.1:4999/api/v1/usuario')#tengo que crearlo en servidor para que funcione
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response=requests.get('http://127.0.0.1:4999/api/v1/usuario',headers=headers)#tengo que crearlo en servidor para que funcione
         usuarios=response.json()
         lista_usuarios=[("","Ninguno")]
         for usuario in usuarios:
@@ -17,6 +18,7 @@ class helper:
         return lista_usuarios
     
     def obtener_huerto(id):
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
         response = requests.get('http://127.0.0.1:4999/api/v1/huerto'+str(id))#esta apiview no es la de huertos, es otra
         huerto=response.json()
         return huerto
