@@ -35,6 +35,20 @@ class BusquedaAvanzadaHuerto(forms.Form):
 
     ubicacion = forms.CharField(label="Ubicación",required=False,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
+class BusquedaAvanzadaGastos(forms.Form):
+    facturas=forms.FloatField(label='Facturas')
+    imprevistos=forms.FloatField(label='Imprevistos')
+    descripcion=forms.CharField(label='Descripción',required=False)
+    fecha=forms.DateField(label='Fecha de gasto',required=False,widget=forms.SelectDateWidget)
+    
+class BusquedaAvanzadaBlog(forms.Form):
+    PUBLICACION=[('C','comentario'),('N','noticia'),('E','enlace'),('T','tutorial'),('R','reseña')]
+    publicacion=forms.MultipleChoiceField(choices=PUBLICACION,required=False,widget=forms.CheckboxSelectMultiple)
+    fecha=forms.DateField(label='Fecha de publicación')
+    etiqueta=forms.CharField(label='Etiqueta')
+    
+
+
 class HuertoForm(forms.Form):#formulario de crear
     SITIO=[
         ("M","maceta"),

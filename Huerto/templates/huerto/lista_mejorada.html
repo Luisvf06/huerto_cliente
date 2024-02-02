@@ -1,21 +1,25 @@
-{%extends 'principal.html'%}
-{%block contenido%}
-    <h1 class= "display-3">Lista de huertos </h1>
-    {% for huerto in huertos_mostrar%}
-        <h2>Huerto: {{huerto.id}}</h2>
-        <p>ubicacion: {{huerto.ubicacion}}</p>
-        <p>sitio{{huerto.sitio}} </p>
-        <p>sustrato {{huerto.sustrato}}</p>
-        <p>area {{huerto.area}}</p>
-        <p>acidez {{huerto.acidez}}</p>
-        <p>abonado {{huerto.abonado}}</p>
-
-        {% for usuario in huerto.usuario %}
-            <p> usuario {{usuario.username}}</p>
-            {% empty %}
-                No hay datos
+{% extends 'principal.html' %}
+{% block contenido %}
+    <h1 class="display-3">Lista de huertos</h1>
+    {% if huertos_mostrar %}
+        {% for huerto in huertos_mostrar %}
+            <h2>Huerto: {{ huerto.id }}</h2>
+            <p>Ubicación: {{ huerto.ubicacion }}</p>
+            <p>Sitio: {{ huerto.sitio }} </p>
+            <p>Sustrato: {{ huerto.sustrato }}</p>
+            <p>Área: {{ huerto.area }}</p>
+            <p>Acidez: {{ huerto.acidez }}</p>
+            <p>Abonado: {{ huerto.abonado }}</p>
+            {% if huerto.usuario %}
+                <h3>Usuarios:</h3>
+                {% for usuario in huerto.usuario %}
+                    <p>Usuario: {{ usuario.username }}</p>
+                {% endfor %}
+            {% else %}
+                <p>No hay usuarios asociados a este huerto</p>
+            {% endif %}
         {% endfor %}
-        {% empty %}
-        No hay datos
-    {%endfor%}
-{%endblock%}
+    {% else %}
+        <p>No hay datos de huertos para mostrar</p>
+    {% endif %}
+{% endblock %}

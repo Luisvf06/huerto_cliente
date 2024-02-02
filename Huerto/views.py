@@ -10,8 +10,8 @@ import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Create your views here.
 #Vistas API
 
@@ -35,7 +35,7 @@ def huertos_lista_api(request):
     return render(request,'huerto/lista_api.html',{'huertos_mostrar':huertos})
 
 def huertos_lista_mejorada(request):
-    headers={'Authorization': 'Bearer PqKT5fQeiXpL5TPFZcsDBaCAkSgdVQ'}
+    headers=crear_cabecera()
     response = requests.get('http://127.0.0.1:4999/api/v1/huertos_mejorada',headers=headers)
     huertos=response.json()
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
@@ -46,6 +46,7 @@ def Gastos_lista_mejorada(request):
     gastos=response.json()
     return render(request,'gasto/lista_mejorada.html',{'gastos_mostrar':gastos})
 
+            
 def Blog_lista_mejorada(request):
     headers={'Authorization': 'Bearer rym15d5na7hpGWtUXgNOncq1OfGTkh'}
     response=requests.get('http://127.0.0.1:4999/api/v1/blogs')
@@ -96,6 +97,36 @@ def huerto_buscar_avanzada(request):
     else:
         formulario=BusquedaAvanzadaHuerto(None)
         return render(request, 'huerto/busqueda_avanzada.html',{"formulario":formulario})
+
+def gastos_buscar_avanzada(request):
+    if len(request.GET)>0:
+        formulario=BusquedaAvanzadaGastos(request.GET)
+        
+        try:
+            headers=crear_cabecera()
+            response=request.get('')
+            response=requests.get('http://127.0.0.1:4999/api/v1/gastos_busqueda_avanzada',headers=headers,params=formulario.data)
+            if response.status_code==200:
+                gastos=response.json()
+                return render(request,'gastos/lista_mejorada.html',{"gastos_mostrar":gastos})#tengo que crear esta plantilla
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la peticion:{http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gastos/busqueda_avanzada.html',{"formulario":formulario,"errores":errores})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    else:
+        formulario=BusquedaAvanzadaGastos(None)
+        return render(request,'gastos/busqueda_avanzada.html',{"formulario":formulario})
 
 def huerto_crear(request):
     if(request.method=="POST"):
