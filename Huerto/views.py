@@ -13,7 +13,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
 versionServer='v1' 
-#Diapositiva 45 Respuesta 1: se puede mejorar incluyendo el v1 en una variable, de forma que todos accediesen a la misma y si se actualizara, sólo hubiera que cambiar el valor donde se declara. La prueba la he hecho en def huertos_lista_api
+#Diapositiva 45 Respuesta 1: se puede mejorar incluyendo el v1 en una variable, de forma que todos accediesen a la misma y si se actualizara, sólo hubiera que cambiar el valor donde se declara.
 #Respuesta 2 se crea una nueva funcion que tenga en cuenta los dinstitos tipos de tipo de datos y se sustituye en la parte del response
 # Create your views here.
 #Vistas API
@@ -56,21 +56,21 @@ def huertos_lista_api(request):
 
 def huertos_lista_mejorada(request):
     headers=crear_cabecera()
-    response = requests.get('http://127.0.0.1:4999/api/v1/huertos_mejorada',headers=headers)
+    response = requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huertos_mejorada',headers=headers)
     huertos=obtener_respuesta(response)
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
 
 def Gastos_lista_mejorada(request):
     headers=crear_cabecera()
-    response= requests.get('http://127.0.0.1:4999/api/v1/gastos',headers=headers)
+    response= requests.get('http://127.0.0.1:4999/api/'+versionServer+'/gastos',headers=headers)
     gastos=obtener_respuesta(response)
     return render(request,'gastos/lista_mejorada.html',{'gastos_mostrar':gastos})
 
             
 def Blog_lista_mejorada(request):
     headers=crear_cabecera()
-    response=requests.get('http://127.0.0.1:4999/api/v1/blogs', headers=headers)
-    blogs=response.json()
+    response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/blogs', headers=headers)
+    blogs=obtener_respuesta(response)
     return render(request,'blog/lista_mejorada.html',{'blogs_mostrar':blogs})
 
 def huerto_buscar_cl(request):
@@ -78,8 +78,8 @@ def huerto_buscar_cl(request):
     
     if formulario.is_valid():
         headers= crear_cabecera()
-        response = requests.get('http://127.0.0.1:4999/api/v1/huerto_busqueda_simple',headers=headers,params=formulario.cleaned_data)#en api/v1 antes estaba huertos pero devolvia toda la lista en lugar de las coincidencias, ahora no devuelve nada
-        huertos = response.json()
+        response = requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huerto_busqueda_simple',headers=headers,params=formulario.cleaned_data)#en api/v1 antes estaba huertos pero devolvia toda la lista en lugar de las coincidencias, ahora no devuelve nada
+        huertos = obtener_respuesta(response)
         
         return render(request, 'huerto/lista_api.html',{"huertos_mostrar":huertos})
     if ("HTTP_REFERER"in request.META):
@@ -93,10 +93,10 @@ def huerto_buscar_avanzada(request):
         formulario=BusquedaAvanzadaHuerto(request.GET)
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/v1/huerto_busqueda_avanzada',headers=headers,params=formulario.data)#huerto_busqueda_avanzada es el nombre que va en el archivo api_urls.py de servidor
+            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huerto_busqueda_avanzada',headers=headers,params=formulario.data)#huerto_busqueda_avanzada es el nombre que va en el archivo api_urls.py de servidor
             if response.status_code == 200:
 
-                huertos=response.json()
+                huertos=obtener_respuesta(response)
                 return render(request,'huerto/lista_mejorada.html',{"huertos_mostrar":huertos})#tengo que crear la plantilla lista mejorada
             else:
                 print(response.status_code)
@@ -104,7 +104,7 @@ def huerto_buscar_avanzada(request):
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion:{http_err}')
             if(response.status_code==400):
-                errores=response.json()
+                errores=obtener_respuesta(response)
                 for error in errores:
                     formulario.add_error(error,errores[error])
                 return render(request,'huerto/busqueda_avanzada.html',{"formulario":formulario,"errores":errores})
@@ -122,9 +122,9 @@ def gastos_buscar_avanzada(request):
         formulario=BusquedaAvanzadaGastos(request.GET)
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/v1/gastos_busqueda_avanzada',headers=headers,params=formulario.data)
+            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/gastos_busqueda_avanzada',headers=headers,params=formulario.data)
             if response.status_code==200:
-                gastos=response.json()
+                gastos=obtener_respuesta(response)
                 return render(request,'gastos/lista_mejorada.html',{"gastos_mostrar":gastos})#tengo que crear esta plantilla
             else:
                 print(response.status_code)
@@ -132,7 +132,7 @@ def gastos_buscar_avanzada(request):
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion:{http_err}')
             if(response.status_code==400):
-                errores=response.json()
+                errores=obtener_respuesta(response)
                 for error in errores:
                     formulario.add_error(error,errores[error])
                 return render(request,'gastos/busqueda_avanzada.html',{"formulario":formulario,"errores":errores})
@@ -151,9 +151,9 @@ def blog_buscar_avanzada(request):
         
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/v1/blog_busqueda_avanzada',headers=headers,params=formulario.data)
+            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/blog_busqueda_avanzada',headers=headers,params=formulario.data)
             if response.status_code==200:
-                blogs=response.json()
+                blogs=obtener_respuesta(response)
                 return render(request,'blog/lista_mejorada.html',{"blogs_mostrar":blogs})#tengo que crear esta plantilla
             else:
                 print(response.status_code)
@@ -161,7 +161,7 @@ def blog_buscar_avanzada(request):
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion:{http_err}')
             if(response.status_code==400):
-                errores=response.json()
+                errores=obtener_respuesta(response)
                 for error in errores:
                     formulario.add_error(error,errores[error])
                 return render(request,'blog/busqueda_avanzada.html',{"formulario":formulario,"errores":errores})
@@ -196,7 +196,7 @@ def huerto_crear(request):
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion: {http_err}')
             if(response.status_code==400):
-                errores=response.json()
+                errores=obtener_respuesta(response)
                 for error in errores:
                     formulario.add_error(error,errores[error])
                 return render(request,
