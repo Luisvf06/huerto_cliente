@@ -5,11 +5,11 @@
         <h2>blog: {{blog.id}}</h2>
         <p>etiqueta: {{blog.etiqueta}}</p>
         <p>fecha: {{blog.fecha}}</p>
-        {% for usuario in blog.usuario %}
+        <!--{% for usuario in blog.usuario %}
             <p> usuario {{usuario.username}}</p>
             {% empty %}
                 No hay datos
-        {% endfor %}
+        {% endfor %}-->
         {% empty %}
         No hay datos
     {%endfor%}

@@ -14,7 +14,7 @@ urlpatterns =[
     path('huerto/buscar_avanzada',views.huerto_buscar_avanzada,name='huerto_buscar_avanzada'),
     #hacer las busquedas de gastos y blog
     path('gastos/buscas_avanzada',views.gastos_buscar_avanzada,name='gastos_buscar_avanzada'),
-    #path('blog/buscar_avanzada',views.blog_buscar_avanzada,name='blog_buscar_avanzada'),
+    path('blog/buscar_avanzada',views.blog_buscar_avanzada,name='blog_buscar_avanzada'),
     path('huerto/crear',views.huerto_crear,name='huertos_crear')
 
 ]

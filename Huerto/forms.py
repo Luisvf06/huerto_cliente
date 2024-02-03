@@ -36,17 +36,24 @@ class BusquedaAvanzadaHuerto(forms.Form):
     ubicacion = forms.CharField(label="Ubicación",required=False,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
 class BusquedaAvanzadaGastos(forms.Form):
-    facturas=forms.FloatField(label='Facturas')
-    imprevistos=forms.FloatField(label='Imprevistos')
-    descripcion=forms.CharField(label='Descripción',required=False)
-    fecha=forms.DateField(label='Fecha de gasto',required=False,widget=forms.SelectDateWidget)
-    
+    gasto_busqueda=forms.FloatField(label="Importe",required=False)
+    texto_busqueda=forms.CharField(label="Texto",required=False)
+
 class BusquedaAvanzadaBlog(forms.Form):
     PUBLICACION=[('C','comentario'),('N','noticia'),('E','enlace'),('T','tutorial'),('R','reseña')]
     publicacion=forms.MultipleChoiceField(choices=PUBLICACION,required=False,widget=forms.CheckboxSelectMultiple)
-    fecha=forms.DateField(label='Fecha de publicación')
-    etiqueta=forms.CharField(label='Etiqueta')
+    etiqueta=forms.CharField(label='Etiqueta',required=False)
     
+    fecha_desde = forms.DateField(label="Fecha Desde",
+                                required=False,
+                                widget= forms.SelectDateWidget(years=range(1990,2026))
+                                )
+    
+    fecha_hasta = forms.DateField(label="Fecha Hasta",
+                                required=False,
+                                widget= forms.SelectDateWidget(years=range(1990,2026))
+                                )
+
 
 
 class HuertoForm(forms.Form):#formulario de crear

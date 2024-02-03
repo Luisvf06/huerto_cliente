@@ -1,0 +1,19 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+  {% load bootstrap5 %}
+  
+  <form action="{% url 'gastos_buscar_avanzada' %}" method="GET">
+    {% csrf_token %}
+
+    <div>
+        {% bootstrap_field formulario.gasto_busqueda show_label=True %}
+    </div>
+
+    <div>
+        {% bootstrap_field formulario.texto_busqueda show_label=True %}
+    </div>
+
+    <button type="submit">Enviar</button>
+    </form>
+{% endblock %}

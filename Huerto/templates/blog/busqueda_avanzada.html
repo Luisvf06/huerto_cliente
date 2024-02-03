@@ -1,0 +1,24 @@
+{% extends "principal.html" %}
+
+{% block contenido %}
+  {% load bootstrap5 %}
+  <form action="{% url 'blog_buscar_avanzada' %}" method="GET">
+    {% csrf_token %}
+
+    <div>
+        {% bootstrap_field formulario.publicacion show_label=True %}
+    </div>
+
+    <div>
+        {% bootstrap_field formulario.etiqueta show_label=True %}
+    </div>
+    <div>
+        {% bootstrap_field formulario.fecha_desde show_label=True %}
+    </div>
+    <div>
+        {% bootstrap_field formulario.fecha_hasta show_label=True %}
+    </div>
+
+    <button type="submit">Enviar</button>
+    </form>
+{% endblock %}
