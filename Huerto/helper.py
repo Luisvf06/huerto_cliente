@@ -14,7 +14,7 @@ class helper:
         usuarios=response.json()
         lista_usuarios=[("","Ninguno")]
         for usuario in usuarios:
-            lista_usuarios.append(usuario["id"],usuario["username"])
+            lista_usuarios.append((usuario["id"],usuario["username"]))
         return lista_usuarios
     
     def obtener_huerto(id):

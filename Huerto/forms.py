@@ -73,11 +73,11 @@ class HuertoForm(forms.Form):#formulario de crear
     ]
     sustrato=forms.ChoiceField(choices=SUSTRATO,required=True,widget=forms.CheckboxSelectMultiple())
 
-    area_minima=forms.FloatField(label="Área mínima",required=True)
+    area=forms.FloatField(label="Área",required=True)
     
-    area_maxima=forms.FloatField(label="Área máxima",required=True)
+    acidez=forms.FloatField(label='Acidez',required=True)
     
-    abonado=forms.BooleanField(required=True)
+    abonado=forms.BooleanField()
 
     ubicacion = forms.CharField(label="Ubicación",required=True,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
@@ -91,3 +91,20 @@ class HuertoForm(forms.Form):#formulario de crear
             widget=forms.Select,
             required=True
         )
+        
+class GastoForm(forms.Form): #formulario crear
+    herramientas=forms.FloatField(label='Herramientas',required=True)
+    
+    facturas=forms.FloatField(label='Facturas',required=True)
+    
+    imprevistos=forms.FloatField(label='Imprevistos',required=True)
+    Descripcion=forms.CharField(label='Descripción',required=True)
+    fecha=forms.DateField(label='Fecha',required=False,initial=datetime.date.today,widget=forms.SelectDateWidget(years=range(1990,2024)))
+
+    def __init__(self,*args,**kwargs):
+        super(GastoForm,self).__init__(*args,**kwargs)
+        usuario=helper.obtener_usuarios_select()
+        self.fields["usuario"]=forms.ChoiceField(choices=usuario,widget=forms.Select,required=True)
+
+    
+    

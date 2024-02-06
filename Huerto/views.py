@@ -12,7 +12,7 @@ import xml.etree.ElementTree as ET
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
-versionServer='v1' 
+versionServer='http://127.0.0.1:4999/api/v1' 
 #Diapositiva 45 Respuesta 1: se puede mejorar incluyendo el v1 en una variable, de forma que todos accediesen a la misma y si se actualizara, sólo hubiera que cambiar el valor donde se declara.
 #Respuesta 2 se crea una nueva funcion que tenga en cuenta los dinstitos tipos de tipo de datos y se sustituye en la parte del response
 # Create your views here.
@@ -43,12 +43,12 @@ def obtener_respuesta(response):
 def index(request):
     return render(request,'index.html')
 def crear_cabecera():
-    return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),
+    return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
 }
 def huertos_lista_api(request):
     headers=crear_cabecera()
     #headers={'Authorization': 'Bearer PqKT5fQeiXpL5TPFZcsDBaCAkSgdVQ'}
-    response = requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huertos',headers=headers)
+    response = requests.get(versionServer+'/huertos',headers=headers)
     
     huertos=obtener_respuesta(response)
     #huertos=response.json() version que solo espera una respuesta en formato json
@@ -56,20 +56,20 @@ def huertos_lista_api(request):
 
 def huertos_lista_mejorada(request):
     headers=crear_cabecera()
-    response = requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huertos_mejorada',headers=headers)
+    response = requests.get(versionServer+'/huertos_mejorada',headers=headers)
     huertos=obtener_respuesta(response)
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
 
 def Gastos_lista_mejorada(request):
     headers=crear_cabecera()
-    response= requests.get('http://127.0.0.1:4999/api/'+versionServer+'/gastos',headers=headers)
+    response= requests.get(versionServer+'/gastos',headers=headers)
     gastos=obtener_respuesta(response)
     return render(request,'gastos/lista_mejorada.html',{'gastos_mostrar':gastos})
 
             
 def Blog_lista_mejorada(request):
     headers=crear_cabecera()
-    response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/blogs', headers=headers)
+    response=requests.get(versionServer+'/blogs', headers=headers)
     blogs=obtener_respuesta(response)
     return render(request,'blog/lista_mejorada.html',{'blogs_mostrar':blogs})
 
@@ -78,7 +78,7 @@ def huerto_buscar_cl(request):
     
     if formulario.is_valid():
         headers= crear_cabecera()
-        response = requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huerto_busqueda_simple',headers=headers,params=formulario.cleaned_data)#en api/v1 antes estaba huertos pero devolvia toda la lista en lugar de las coincidencias, ahora no devuelve nada
+        response = requests.get(versionServer+'/huerto_busqueda_simple',headers=headers,params=formulario.cleaned_data)#en api/v1 antes estaba huertos pero devolvia toda la lista en lugar de las coincidencias, ahora no devuelve nada
         huertos = obtener_respuesta(response)
         
         return render(request, 'huerto/lista_api.html',{"huertos_mostrar":huertos})
@@ -93,7 +93,7 @@ def huerto_buscar_avanzada(request):
         formulario=BusquedaAvanzadaHuerto(request.GET)
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/huerto_busqueda_avanzada',headers=headers,params=formulario.data)#huerto_busqueda_avanzada es el nombre que va en el archivo api_urls.py de servidor
+            response=requests.get(versionServer+'/huerto_busqueda_avanzada',headers=headers,params=formulario.data)#huerto_busqueda_avanzada es el nombre que va en el archivo api_urls.py de servidor
             if response.status_code == 200:
 
                 huertos=obtener_respuesta(response)
@@ -122,7 +122,7 @@ def gastos_buscar_avanzada(request):
         formulario=BusquedaAvanzadaGastos(request.GET)
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/gastos_busqueda_avanzada',headers=headers,params=formulario.data)
+            response=requests.get(versionServer+'/gastos_busqueda_avanzada',headers=headers,params=formulario.data)
             if response.status_code==200:
                 gastos=obtener_respuesta(response)
                 return render(request,'gastos/lista_mejorada.html',{"gastos_mostrar":gastos})#tengo que crear esta plantilla
@@ -151,7 +151,7 @@ def blog_buscar_avanzada(request):
         
         try:
             headers=crear_cabecera()
-            response=requests.get('http://127.0.0.1:4999/api/'+versionServer+'/blog_busqueda_avanzada',headers=headers,params=formulario.data)
+            response=requests.get(versionServer+'/blog_busqueda_avanzada',headers=headers,params=formulario.data)
             if response.status_code==200:
                 blogs=obtener_respuesta(response)
                 return render(request,'blog/lista_mejorada.html',{"blogs_mostrar":blogs})#tengo que crear esta plantilla
@@ -178,20 +178,18 @@ def huerto_crear(request):
     if(request.method=="POST"):
         try:
             formulario=HuertoForm(request.POST)
-            headers= {
-                "Content-Type": "application/json"
-            }
+            headers= crear_cabecera()
             datos=formulario.data.copy()
-            datos["usuarios"]= request.POST.getlist("usuarios");
+            datos["usuarios"]= request.POST.getlist("usuarios")
             response=requests.post(
-                'http://127.0.0.1:4999/api/v1/huertos/crear',
+                versionServer+'/huertos/crear',
                 headers=headers,
                 data=json.dumps(datos)
             )
             if(response.status_code == requests.codes.ok):
-                return redirect("huerto_lista")
+                return redirect("huertos_lista_api")
             else:
-                print(response.status.code)
+                print(response.status_code)
                 response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la peticion: {http_err}')
@@ -206,12 +204,45 @@ def huerto_crear(request):
                 return mi_error_500(request)
         except Exception as err:
             print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)  
+    else:
+        formulario = HuertoForm(None)
+    return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
+
+def gastos_crear(request):
+    if(request.method=="POST"):
+        try:
+            formulario= GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=formulario.data.copy()
+            datos["usuario"]=request.POST.getlist("usuario")
+            datos["fecha"]=str(datetime.date(year=int(datos['fecha_year']),month=int(datos['fecha_month']),day=int(datos['fecha_day'])))
+            
+            response=request.post(versionServer+'/gastos/crear',headers=headers,data=json.dumps(datos))
+            if(response.status_code==requests.codes.ok):
+                return redirect("Gastos_lista_mejorada")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gastos/crear_gasto.html',{"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
             return mi_error_500(request)
-        
-        else:
-            formulario = HuertoForm(None)
-        return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
-        
+    else:
+        formulario=GastoForm(None)
+    return render(request,'gastos/crear_gasto.html',{"formulario":formulario})
+            
+def blog_crear(request):
+    pass  
+
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

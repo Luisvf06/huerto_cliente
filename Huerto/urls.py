@@ -12,9 +12,13 @@ urlpatterns =[
     
     path('huerto/buscar/',views.huerto_buscar_cl,name='huerto_buscar'),
     path('huerto/buscar_avanzada',views.huerto_buscar_avanzada,name='huerto_buscar_avanzada'),
-    #hacer las busquedas de gastos y blog
+    path('huerto/crear',views.huerto_crear,name='huertos_crear'),
+
+
     path('gastos/buscas_avanzada',views.gastos_buscar_avanzada,name='gastos_buscar_avanzada'),
     path('blog/buscar_avanzada',views.blog_buscar_avanzada,name='blog_buscar_avanzada'),
-    path('huerto/crear',views.huerto_crear,name='huertos_crear')
+    path('gastos/crear',views.gastos_crear,name='gastos_crear'),
+    path('blog/crear',views.blog_crear,name='blog_crear'),
+    
 
 ]
