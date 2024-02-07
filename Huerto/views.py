@@ -8,6 +8,8 @@ import requests
 import environ
 import os
 from pathlib import Path
+from datetime import datetime
+from django.http import JsonResponse
 import xml.etree.ElementTree as ET
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
@@ -210,36 +212,45 @@ def huerto_crear(request):
     return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
 
 def gastos_crear(request):
-    if(request.method=="POST"):
+    if request.method == "POST":
+        print(request.POST)
         try:
-            formulario= GastoForm(request.POST)
-            headers=crear_cabecera()
-            datos=formulario.data.copy()
-            datos["usuario"]=request.POST.getlist("usuario")
-            datos["fecha"]=str(datetime.date(year=int(datos['fecha_year']),month=int(datos['fecha_month']),day=int(datos['fecha_day'])))
+            formulario = GastoForm(request.POST)
+            headers = crear_cabecera()
+            datos = formulario.data.copy()
+            datos["usuario"] = request.POST.getlist("usuario")
             
-            response=request.post(versionServer+'/gastos/crear',headers=headers,data=json.dumps(datos))
-            if(response.status_code==requests.codes.ok):
+            # Obtener el valor del campo de fecha del formulario POST
+            fecha_str = request.POST.get('fecha')
+            
+            # Convertir la cadena de fecha a un objeto datetime
+            fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
+            
+            # Extraer el año, mes y día de la fecha
+            datos["fecha_year"] = fecha_obj.year
+            datos["fecha_month"] = fecha_obj.month
+            datos["fecha_day"] = fecha_obj.day
+            response = requests.post(versionServer+'/gastos/crear', headers=headers, data=json.dumps(datos))
+            if response.status_code == requests.codes.ok:
                 return redirect("Gastos_lista_mejorada")
             else:
                 print(response.status_code)
                 response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la petición: {http_err}')
-            if(response.status_code==400):
-                errores=response.json()
+            if response.status_code == 400:
+                errores = response.json()
                 for error in errores:
-                    formulario.add_error(error,errores[error])
-                return render(request,'gastos/crear_gasto.html',{"formulario":formulario})
+                    formulario.add_error(error, errores[error])
+                return render(request, 'gastos/crear_gasto.html', {"formulario": formulario})
             else:
                 return mi_error_500(request)
         except Exception as err:
             print(f'Ocurrió un error: {err}')
             return mi_error_500(request)
     else:
-        formulario=GastoForm(None)
-    return render(request,'gastos/crear_gasto.html',{"formulario":formulario})
-            
+        formulario = GastoForm(None)
+    return render(request, 'gastos/crear_gasto.html', {"formulario": formulario})
 def blog_crear(request):
     pass  
 
