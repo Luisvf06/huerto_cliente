@@ -21,7 +21,6 @@ versionServer='http://127.0.0.1:4999/api/v1'
 #Vistas API
 
 
-import requests
 
 import os
 from pathlib import Path
@@ -62,7 +61,7 @@ def huertos_lista_mejorada(request):
     huertos=obtener_respuesta(response)
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
 
-def Gastos_lista_mejorada(request):
+def gastos_lista_mejorada(request):
     headers=crear_cabecera()
     response= requests.get(versionServer+'/gastos',headers=headers)
     gastos=obtener_respuesta(response)
@@ -182,7 +181,9 @@ def huerto_crear(request):
             formulario=HuertoForm(request.POST)
             headers= crear_cabecera()
             datos=formulario.data.copy()
-            datos["usuarios"]= request.POST.getlist("usuarios")
+            datos["usuarios"]= request.POST.get("usuarios")
+            if(not 'abonado' in datos):
+                datos['abonado'] = "off"
             response=requests.post(
                 versionServer+'/huertos/crear',
                 headers=headers,
@@ -217,22 +218,28 @@ def gastos_crear(request):
         try:
             formulario = GastoForm(request.POST)
             headers = crear_cabecera()
-            datos = formulario.data.copy()
-            datos["usuario"] = request.POST.getlist("usuario")
             
-            # Obtener el valor del campo de fecha del formulario POST
             fecha_str = request.POST.get('fecha')
             
             # Convertir la cadena de fecha a un objeto datetime
             fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
             
-            # Extraer el año, mes y día de la fecha
-            datos["fecha_year"] = fecha_obj.year
-            datos["fecha_month"] = fecha_obj.month
-            datos["fecha_day"] = fecha_obj.day
+            # Asignar la fecha al formato dd/mm/yyyy
+            fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
+            
+            # Definir los datos a enviar en el POST request
+            datos = {
+                "fecha": fecha_formatted,
+                "herramientas": request.POST.get('herramientas'),
+                "facturas": request.POST.get('facturas'),
+                "imprevistos": request.POST.get('imprevistos'),
+                "Descripcion": request.POST.get('Descripcion'),
+                "usuario": request.POST.get('usuario'),
+            }
+            
             response = requests.post(versionServer+'/gastos/crear', headers=headers, data=json.dumps(datos))
             if response.status_code == requests.codes.ok:
-                return redirect("Gastos_lista_mejorada")
+                return redirect("gasto_lista_api")
             else:
                 print(response.status_code)
                 response.raise_for_status()
@@ -252,8 +259,35 @@ def gastos_crear(request):
         formulario = GastoForm(None)
     return render(request, 'gastos/crear_gasto.html', {"formulario": formulario})
 def blog_crear(request):
-    pass  
-
+    if (request.method=="POST"):
+        try:
+            formulario=BlogForm(request.POST)
+            headers= crear_cabecera(),
+            fecha_str = request.POST.get('fecha')
+            
+            # Convertir la cadena de fecha a un objeto datetime
+            fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
+            
+            # Asignar la fecha al formato dd/mm/yyyy
+            fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
+            
+            # Definir los datos a enviar en el POST request
+            datos = {
+                "fecha": fecha_formatted,
+                "publicacion": request.POST.get('publicacion'),
+                "etiqueta": request.POST.get('etiqueta'),
+                "usuario": request.POST.get('usuario'),
+            }
+            response=requests.post(versionServer+'/blog/crear', headers=headers, data=json.dumps(datos))
+            if(response.status_code==requests.codes.ok):
+                return redirect("blog_lista_api")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            #continuar el except
+            
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

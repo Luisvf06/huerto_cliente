@@ -5,7 +5,7 @@ from .import views
 urlpatterns =[
     path('',views.index,name='index'),
     path('huerto/lista',views.huertos_lista_api,name='huertos_lista_api'),
-    path('gasto/listaMejorada',views.Gastos_lista_mejorada,name='gasto_lista_api'),
+    path('gasto/listaMejorada',views.gastos_lista_mejorada,name='gasto_lista_api'),
     path('blog/listaMejorada',views.Blog_lista_mejorada,name='blog_lista_api'),
     path('huerto/listaMejorada',views.huertos_lista_mejorada,name='huertos_lista_mejorada_api'),
     

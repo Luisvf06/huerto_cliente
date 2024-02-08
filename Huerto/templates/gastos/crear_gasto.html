@@ -97,19 +97,15 @@
         </div>
     </div>
     <div class="mb-4">
-        <label for ="{{formulario.usuario.id_for_label}}"class="form-label">{{formulario.usuario.label}}: </label>
-        <input name="{{formulario.usuario.html_name}}"type="text" class="form-control {% if formulario.usuario.errors %} is-invalid{%elif formulario.is_bound %}is-valid{%endif%}" id="{{formulario.usuario.id_for_label}}"maxlength="{{formulario.usuario.field.max_length}}"{% if formulario.usuario.field.required %}
-            required
-        {%endif%}
-        value="{% spaceless %}
-        {%if formulario.is_bound %}
-            {{formulario.usuario.value}}
-        {%elif usuario%}
-            {{formulario.usuario.value}}
-        {%endif%}
-        {% endspaceless %}"/>
+        <label for="{{ formulario.usuario.id_for_label }}" class="form-label">{{ formulario.usuario.label }}: </label>
+        <select name="{{ formulario.usuario.html_name }}" class="form-control {% if formulario.usuario.errors %} is-invalid{% elif formulario.is_bound %} is-valid{% endif %}" id="{{ formulario.usuario.id_for_label }}" {% if formulario.usuario.field.required %} required {% endif %}>
+            <option value="">Select User</option>
+            {% for user_choice in formulario.usuario.field.choices %}
+                <option value="{{ user_choice.0 }}" {% if formulario.usuario.value == user_choice.0 %} selected {% endif %}>{{ user_choice.1 }}</option>
+            {% endfor %}
+        </select>
         <div class="invalid-feedback">
-            {% for error in formulario.usuario.errors %} 
+            {% for error in formulario.usuario.errors %}
                 {{ error }}
             {% endfor %}
         </div>

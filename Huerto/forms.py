@@ -63,7 +63,7 @@ class HuertoForm(forms.Form):#formulario de crear
         ("T","terraza"),
         ("P","parcela"),
     ]
-    sitio= forms.ChoiceField(choices=SITIO,widget=forms.CheckboxSelectMultiple())
+    sitio= forms.ChoiceField(choices=SITIO,widget=forms.Select())
     SUSTRATO=[
         ("ARE","arenoso"),
         ("ARC","arcilloso"),
@@ -71,13 +71,13 @@ class HuertoForm(forms.Form):#formulario de crear
         ("FRA","franco"),
         ("TUR","turbado"),
     ]
-    sustrato=forms.ChoiceField(choices=SUSTRATO,required=True,widget=forms.CheckboxSelectMultiple())
+    sustrato=forms.ChoiceField(choices=SUSTRATO,required=True,widget=forms.Select())
 
     area=forms.FloatField(label="Área",required=True)
     
     acidez=forms.FloatField(label='Acidez',required=True)
     
-    abonado=forms.BooleanField()
+    abonado=forms.BooleanField(required=False)
 
     ubicacion = forms.CharField(label="Ubicación",required=True,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
@@ -104,7 +104,30 @@ class GastoForm(forms.Form): #formulario crear
     def __init__(self,*args,**kwargs):
         super(GastoForm,self).__init__(*args,**kwargs)
         usuario=helper.obtener_usuarios_select()
-        self.fields["usuario"]=forms.ChoiceField(choices=usuario,widget=forms.Select,required=True)
+        self.fields["usuario"] = forms.ChoiceField(
+            choices=usuario, 
+            widget=forms.Select, 
+            required=True)
 
     
+class BlogForm(forms.Form):
+    PUBLICACION=[
+        ("C","comentario"),
+        ("N","noticia"),
+        ("E","enlace"),
+        ("T","tutorial"),
+        ("R","reseña"),
+        ]
+    publicacion=forms.ChoiceField(choices=PUBLICACION,required=True,widget=forms.Select())
+    fecha=forms.DateField(label='Fecha',initial=datetime.date.today,widget=forms.SelectDateWidget, required=False)
+    etiqueta=forms.CharField(label='Etiqueta',required='False')
     
+    def __init__(self, *args, **kwargs):
+        super(BlogForm,self).__init__(*args,**kwargs)
+        
+        usuariosDisponibles = helper.obtener_usuarios_select()
+        self.fields["usuario"]=forms.ChoiceField(
+            choices=usuariosDisponibles,
+            widget=forms.Select,
+            required=True
+        )
