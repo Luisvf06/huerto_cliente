@@ -24,7 +24,7 @@
     </div>
 
     <div class="mb-4">
-        <label for ="{{formulario.nombre_usuario.id_for_label}}"class="form-label">{{formulario.facturas.label}}: </label>
+        <label for ="{{formulario.facturas.id_for_label}}"class="form-label">{{formulario.facturas.label}}: </label>
         <input name="{{formulario.facturas.html_name}}"type="text" class="form-control {% if formulario.facturas.errors %} is-invalid{%elif formulario.is_bound %}is-valid{%endif%}" id="{{formulario.facturas.id_for_label}}"maxlength="{{formulario.facturas.field.max_length}}"{% if formulario.facturas.field.required %}
             required
         {%endif%}

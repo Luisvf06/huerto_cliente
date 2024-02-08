@@ -262,7 +262,7 @@ def blog_crear(request):
     if (request.method=="POST"):
         try:
             formulario=BlogForm(request.POST)
-            headers= crear_cabecera(),
+            headers= crear_cabecera()
             fecha_str = request.POST.get('fecha')
             
             # Convertir la cadena de fecha a un objeto datetime
@@ -286,7 +286,19 @@ def blog_crear(request):
                 response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la petición: {http_err}')
-            #continuar el except
+            if(response.status_code == 400):
+                errores = response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 'blog/crear_blog.html',{"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500
+    else:
+        formulario=BlogForm(None)
+        return render(request,'blog/crear_blog.html',{"formulario":formulario})
             
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
