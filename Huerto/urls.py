@@ -20,5 +20,7 @@ urlpatterns =[
     path('gastos/crear',views.gastos_crear,name='gastos_crear'),
     path('blog/crear',views.blog_crear,name='blog_crear'),
     
-
+    path('huerto/actualizar/<int: id_huerto>',views.huerto_put,name='huerto_put'),
+    path('gasto/actualizar/<int: id_gasto>',views.gasto_put,name='gasto_put'),
+    path('blog/actualizar/<int: id_blog>',views.blog_put,name='blog_put'),
 ]

@@ -120,7 +120,7 @@ class BlogForm(forms.Form):
         ]
     publicacion=forms.ChoiceField(choices=PUBLICACION,required=True,widget=forms.Select())
     fecha=forms.DateField(label='Fecha',initial=datetime.date.today,widget=forms.SelectDateWidget, required=False)
-    etiqueta=forms.CharField(label='Etiqueta',required='False')
+    etiqueta=forms.CharField(label='Etiqueta',required=False)
     
     def __init__(self, *args, **kwargs):
         super(BlogForm,self).__init__(*args,**kwargs)
