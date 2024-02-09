@@ -2,9 +2,8 @@
 {%block contenido%}
     <h1 class= "display-3">Lista de huertos </h1>
     {% for blog in blogs_mostrar%}
-        <h2>blog: {{blog.id}}</h2>
-        <p>etiqueta: {{blog.etiqueta}}</p>
-        <p>fecha: {{blog.fecha}}</p>
+
+    {%include "blog/blog.html" %}
         <!--{% for usuario in blog.usuario %}
             <p> usuario {{usuario.username}}</p>
             {% empty %}
@@ -12,5 +11,5 @@
         {% endfor %}-->
         {% empty %}
         No hay datos
-    {%endfor%}
+    {% endfor %}
 {%endblock%}

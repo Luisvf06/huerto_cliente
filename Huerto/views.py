@@ -286,7 +286,19 @@ def blog_crear(request):
                 response.raise_for_status()
         except HTTPError as http_err:
             print(f'Hubo un error en la petición: {http_err}')
-            #continuar el except
+            if(response.status_code == 400):
+                errores = response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 'blog/crear_blog.html',{"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500
+    else:
+        formulario=BlogForm(None)
+        return render(request,'blog/crear_blog.html',{"formulario":formulario})
 
 def huerto_obtener(request,huerto_id):
     huerto=helper.obtener_huerto(huerto_id)
@@ -307,21 +319,83 @@ def huerto_eliminar(request,huerto_id):
         print(f'Ocurrió un error:{err}')
         return mi_error_500(request)
     return redirect('huertos_lista_mejorada_api')
-'''
-            if(response.status_code == 400):
-                errores = response.json()
-                for error in errores:
-                    formulario.add_error(error,errores[error])
-                return render(request, 'blog/crear_blog.html',{"formulario":formulario})
-            else:
+
+def gastos_eliminar(request,gastos_id):
+    try:
+        headers = crear_cabecera()
+        response= request.delete(versionServer+'/gastos/eliminar/'+str(gastos_id),headers=headers)
+        if (response.status_code == request.codes.ok):
+            return redirect("gasto_lista_api")
+        else:
+            print(response.status_code)
+            response.raise_for_status()
+    except Exception as err:
+        print(f'Ocurrió un error:{err}')
+        return mi_error_500(request)
+    return redirect('gasto_lista_api')
+
+def blog_eliminar(request,blog_id):
+    try:
+        headers = crear_cabecera()
+        response= request.delete(versionServer+'/blog/eliminar/'+str(blog_id),headers=headers)
+        if (response.status_code == request.codes.ok):
+            return redirect("blog_lista_api")
+        else:
+            print(response.status_code)
+            response.raise_for_status()
+    except Exception as err:
+        print(f'Ocurrió un error:{err}')
+        return mi_error_500(request)
+    return redirect('blog_lista_api')
+
+def huerto_put(request,huerto_id):
+    datosFormulario=None
+
+    if request.method=="POST":
+        datosFormulario=request.POST
+        huerto=helper.obtener_huerto(huerto_id)
+        formulario=HuertoForm(datosFormulario,
+                            initial={
+                                'ubicacion':huerto['ubicacion'],
+                                'sitio':huerto['sitio'],
+                                'sustrato':huerto['sustrato'],
+                                'acidez':huerto['acidez'],
+                                'abonado':huerto['abonado'],
+                                'area':huerto['area'],
+                                'usuario':huerto['usuario']['id']
+                            })
+        if(request.method=="POST"):
+            try:
+                formulario=HuertoForm(request.POST)
+                headers=crear_cabecera()
+                datos=request.POST.copy()
+                datos["usuarios"]= request.POST.get("usuarios")
+                if(not 'abonado' in datos):
+                    datos['abonado'] = "off"
+                response=requests.put(versionServer+'huerto/editar'+str(huerto_id),headers=headers,data=json.dumps(datos))
+                if(response.status_code==requests.codes.ok):
+                    return redirect("huertos_lista_mejorada_api",huerto_id=huerto_id)
+                else:
+                    print(response.status_code)
+                    response.raise_for_status()
+            except HTTPError as http_err:
+                print(f'Hubo un error en la peticion: {http_err}')
+                if(response.status_code==400):
+                    errores=response.json()
+                    for error in errores:
+                        formulario.add_error(error,errores[error])
+                    return render(request,'huerto/actualizar.html',{"formulario":formulario,"huerto":huerto})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un rror:{err}')
                 return mi_error_500(request)
-        except Exception as err:
-            print(f'Ocurrió un error: {err}')
-            return mi_error_500
-    else:
-        formulario=BlogForm(None)
-        return render(request,'blog/crear_blog.html',{"formulario":formulario})
-'''            
+        return render(request,'huerto/actualizar.html',{"formulario":formulario,"huerto":huerto})
+def gasto_put(request,gasto_id):
+    pass
+
+def blog_put(request,blog_id):
+    pass
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

@@ -19,8 +19,9 @@ urlpatterns =[
     path('blog/buscar_avanzada',views.blog_buscar_avanzada,name='blog_buscar_avanzada'),
     path('gastos/crear',views.gastos_crear,name='gastos_crear'),
     path('blog/crear',views.blog_crear,name='blog_crear'),
-    
-    path('huerto/actualizar/<int: id_huerto>',views.huerto_put,name='huerto_put'),
-    path('gasto/actualizar/<int: id_gasto>',views.gasto_put,name='gasto_put'),
-    path('blog/actualizar/<int: id_blog>',views.blog_put,name='blog_put'),
+    path('gastos/eliminar/<int:gasto_id>',views.gastos_eliminar,name='gastos_eliminar'),
+    path('blog/eliminar/<int:blog_id>',views.blog_eliminar,name='blog_eliminar'),
+    path('huerto/actualizar/<int:id_huerto>',views.huerto_put,name='huerto_put'),
+    path('gasto/actualizar/<int:id_gasto>',views.gasto_put,name='gasto_put'),
+    path('blog/actualizar/<int:id_blog>',views.blog_put,name='blog_put')
 ]

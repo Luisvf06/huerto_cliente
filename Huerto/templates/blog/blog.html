@@ -2,14 +2,12 @@
 {% load static %}
 <script type="text/javascript" src="{% static 'javascript1.js' %}" ></script>
 {% endblock %}
-Huerto: {{huerto.id}}
-Área: {{huerto.area}}
-Sitio: {{huerto.sitio}}
-ID: {{huerto.id}}
-Abono: {{huerto.abonado}}
+<h2>blog: {{blog.id}}</h2>
+<p>etiqueta: {{blog.etiqueta}}</p>
+<p>fecha: {{blog.fecha}}</p>
 <br>
 <div class="mb-2">
-    <form action="{% url 'huerto_eliminar' huerto.id %}" method="post">
+    <form action="{% url 'blog_eliminar' blog.id %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="_method" value="delete">
         <button class="btn btn-danger" onclick="return eliminar();" type="submit">
