@@ -287,7 +287,27 @@ def blog_crear(request):
         except HTTPError as http_err:
             print(f'Hubo un error en la petición: {http_err}')
             #continuar el except
-            
+
+def huerto_obtener(request,huerto_id):
+    huerto=helper.obtener_huerto(huerto_id)
+    return render(request,'huerto/huerto_mostrar.html',{"huerto":huerto})
+
+
+
+def huerto_eliminar(request,huerto_id):
+    try:
+        headers = crear_cabecera()
+        response= request.delete(versionServer+'/huertos/eliminar/'+str(huerto_id),headers=headers)
+        if (response.status_code == request.codes.ok):
+            return redirect("huertos_lista_mejorada_api")
+        else:
+            print(response.status_code)
+            response.raise_for_status()
+    except Exception as err:
+        print(f'Ocurrió un error:{err}')
+        return mi_error_500(request)
+    return redirect('huertos_lista_mejorada_api')
+
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

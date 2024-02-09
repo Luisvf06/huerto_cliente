@@ -2,12 +2,14 @@ import requests
 import environ
 import os
 from pathlib import Path
-
+versionServer='http://127.0.0.1:4999/api/v1' 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 class helper:
+    def crear_cabecera():
+        return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"}
     def obtener_usuarios_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
         response=requests.get('http://127.0.0.1:4999/api/v1/usuario',headers=headers)#tengo que crearlo en servidor para que funcione
@@ -22,3 +24,16 @@ class helper:
         response = requests.get('http://127.0.0.1:4999/api/v1/huerto'+str(id))#esta apiview no es la de huertos, es otra
         huerto=response.json()
         return huerto
+    
+    def obtener_gasto(id):
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response = requests.get(versionServer+'/gasto'+str(id))#esta apiview no es la de huertos, es otra
+        gasto=response.json()
+        return gasto
+    
+    def obtener_blog(id):
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response = requests.get(versionServer+'/blog'+str(id))#esta apiview no es la de huertos, es otra
+        blog=response.json()
+        return blog
+    

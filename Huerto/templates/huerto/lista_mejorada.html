@@ -1,25 +1,8 @@
 {% extends 'principal.html' %}
 {% block contenido %}
     <h1 class="display-3">Lista de huertos</h1>
-    {% if huertos_mostrar %}
-        {% for huerto in huertos_mostrar %}
-            <h2>Huerto: {{ huerto.id }}</h2>
-            <p>Ubicación: {{ huerto.ubicacion }}</p>
-            <p>Sitio: {{ huerto.sitio }} </p>
-            <p>Sustrato: {{ huerto.sustrato }}</p>
-            <p>Área: {{ huerto.area }}</p>
-            <p>Acidez: {{ huerto.acidez }}</p>
-            <p>Abonado: {{ huerto.abonado }}</p>
-            {% if huerto.usuario %}
-                <h3>Usuarios:</h3>
-                {% for usuario in huerto.usuario %}
-                    <p>Usuario: {{ usuario.username }}</p>
-                {% endfor %}
-            {% else %}
-                <p>No hay usuarios asociados a este huerto</p>
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <p>No hay datos de huertos para mostrar</p>
-    {% endif %}
+    {% for huerto in huertos_mostrar%}
+    <h1>Huerto {{huerto.id}}</h1>
+    {%include "huerto/huerto.html" %}
+    {% endfor%}
 {% endblock %}

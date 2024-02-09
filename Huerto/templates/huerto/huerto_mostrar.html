@@ -1,0 +1,11 @@
+{% block cabecera_extra %}
+{% load static %}
+<script type="text/javascript" src="{% static 'javascript1.js' %}" ></script>
+{% endblock %}
+{%block contenido %}
+<h1>Huerto: {{huerto.id}}</h1>
+<div>
+    {% include 'huerto/huerto.html'%}
+</div>
+{% endblock %}
+
