@@ -8,6 +8,15 @@ Sitio: {{huerto.sitio}}
 ID: {{huerto.id}}
 Abono: {{huerto.abonado}}
 <br>
+<div>
+    <form action = "{% url 'huerto_put' huerto.id %}" method = "post"> 
+        {% csrf_token %}
+        <button class="btn btn-danger"  type="submit">
+        <span>Editar</span>
+        </button> 
+    </form>
+</div>
+
 <div class="mb-2">
     <form action="{% url 'huerto_eliminar' huerto.id %}" method="post">
         {% csrf_token %}

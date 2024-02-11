@@ -391,11 +391,490 @@ def huerto_put(request,huerto_id):
                 print(f'Ocurrió un rror:{err}')
                 return mi_error_500(request)
         return render(request,'huerto/actualizar.html',{"formulario":formulario,"huerto":huerto})
+    
 def gasto_put(request,gasto_id):
-    pass
+    datosFormulario=None
 
+    if request.method=="POST":
+        datosFormulario=request.POST
+        gasto=helper.obtener_gasto(gasto_id)
+        formulario=GastoForm(datosFormulario,
+                            initial={
+                                'herramientas':gasto['herramientas'],
+                                'facturas':gasto['facturas'],
+                                'Descripcion':gasto['Descripcion'],
+                                'imprevistos':gasto['imprevistos'],
+                                'fecha':datetime.datetime.strptime(gasto['fecha'], '%d-%m%Y').date()
+
+                            })
+        if(request.method=="POST"):
+            try:
+                formulario=GastoForm(request.POST)
+                headers=crear_cabecera()
+                datos=request.POST.copy()
+                fecha_str = request.POST.get('fecha')
+            
+            # Convertir la cadena de fecha a un objeto datetime
+                fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
+                
+                # Asignar la fecha al formato dd/mm/yyyy
+                fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
+
+                response=requests.put(versionServer+'gasto/editar'+str(gasto_id),headers=headers,data=json.dumps(datos))
+                if(response.status_code==requests.codes.ok):
+                    return redirect("gasto_lista_api",gasto_id=gasto_id)
+                else:
+                    print(response.status_code)
+                    response.raise_for_status()
+            except HTTPError as http_err:
+                print(f'Hubo un error en la peticion: {http_err}')
+                if(response.status_code==400):
+                    errores=response.json()
+                    for error in errores:
+                        formulario.add_error(error,errores[error])
+                    return render(request,'gastos/actualizar.html',{"formulario":formulario,"gasto":gasto})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un rror:{err}')
+                return mi_error_500(request)
+        return render(request,'gastos/actualizar.html',{"formulario":formulario,"gasto":gasto})
 def blog_put(request,blog_id):
-    pass
+    datosFormulario=None
+
+    if request.method=="POST":
+        datosFormulario=request.POST
+        blog=helper.obtener_gasto(blog_id)
+        formulario=GastoForm(datosFormulario,
+                            initial={
+                                'publicacion':blog['publicacion'],
+                                'etiqueta':blog['etiqueta'],
+                                'fecha':datetime.datetime.strptime(blog['fecha'], '%d-%m%Y').date()
+                            })
+        if(request.method=="POST"):
+            try:
+                formulario=BlogForm(request.POST)
+                headers=crear_cabecera()
+                datos=request.POST.copy()
+                fecha_str = request.POST.get('fecha')
+            
+            # Convertir la cadena de fecha a un objeto datetime
+                fecha_obj = datetime.strptime(fecha_str, '%d/%m/%Y')
+                
+                # Asignar la fecha al formato dd/mm/yyyy
+                fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
+                response=requests.put(versionServer+'blog/editar'+str(blog_id),headers=headers,data=json.dumps(datos))
+                if(response.status_code==requests.codes.ok):
+                    return redirect("blog_lista_api",blog_id=blog_id)
+                else:
+                    print(response.status_code)
+                    response.raise_for_status()
+            except HTTPError as http_err:
+                print(f'Hubo un error en la peticion: {http_err}')
+                if(response.status_code==400):
+                    errores=response.json()
+                    for error in errores:
+                        formulario.add_error(error,errores[error])
+                    return render(request,'blog/actualizar.html',{"formulario":formulario,"blog":blog})
+                else:
+                    return mi_error_500(request)
+            except Exception as err:
+                print(f'Ocurrió un rror:{err}')
+                return mi_error_500(request)
+        return render(request,'blog/actualizar.html',{"formulario":formulario,"blog":blog})
+    
+
+def huerto_patch_ubi(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarUbiForm(datosFormulario,initial={
+        'ubicacion':huerto['ubicacion'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/ubicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_ubicacion.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_ubicacion.html',{"formulario":formulario,"huerto":huerto})
+
+
+
+def huerto_patch_sit(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarSitForm(datosFormulario,initial={
+        'sitio':huerto['sitio'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/sitio'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_sitio.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_sitio.html',{"formulario":formulario,"huerto":huerto})
+
+
+def huerto_patch_sus(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarSusForm(datosFormulario,initial={
+        'sustrato':huerto['sustrato'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/sustrato'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_sustrato.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_sustrato.html',{"formulario":formulario,"huerto":huerto})
+
+
+def huerto_patch_abo(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarAboForm(datosFormulario,initial={
+        'abonado':huerto['abonado'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/abonado'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_abonado.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_abonado.html',{"formulario":formulario,"huerto":huerto})
+
+
+def huerto_patch_are(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarAreForm(datosFormulario,initial={
+        'area':huerto['area'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/area'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_area.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_area.html',{"formulario":formulario,"huerto":huerto})
+
+
+def huerto_patch_aci(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_huerto(huerto_id)
+    formulario=HuertoActualizarAciForm(datosFormulario,initial={
+        'acidez':huerto['acidez'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=HuertoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'huerto/actualizar/acidez'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("huerto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'huerto/actualizar_acidez.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'huerto/actualizar_acidez.html',{"formulario":formulario,"huerto":huerto})
+
+def gasto_patch_factura(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_gasto(huerto_id)
+    formulario=GastoActualizarFacForm(datosFormulario,initial={
+        'factura':huerto['factura'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Gasto/actualizar/factura'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("gasto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gasto/actualizar_factura.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'gasto/actualizar_factura.html',{"formulario":formulario,"huerto":huerto})
+
+def gasto_patch_descripcion(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_gasto(huerto_id)
+    formulario=GastoActualizarDesForm(datosFormulario,initial={
+        'descripcion':huerto['descripcion'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Gasto/actualizar/descripcoin'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("gasto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gasto/actualizar_descripcion.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'gasto/actualizar_descripcion.html',{"formulario":formulario,"huerto":huerto})
+
+def gasto_patch_herramienta(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_gasto(huerto_id)
+    formulario=GastoActualizarHerForm(datosFormulario,initial={
+        'herramientas':huerto['herramientas'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Gasto/actualizar/herramientas'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("gasto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gasto/actualizar_herramientas.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'gasto/actualizar_herramientas.html',{"formulario":formulario,"huerto":huerto})
+
+def gasto_patch_imprevisto(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_gasto(huerto_id)
+    formulario=GastoActualizarImpForm(datosFormulario,initial={
+        'imprevisto':huerto['imprevisto'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Gasto/actualizar/imprevisto'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("gasto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gasto/actualizar_imprevisto.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'gasto/actualizar_imprevisto.html',{"formulario":formulario,"huerto":huerto})
+
+def gasto_patch_fecha(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_gasto(huerto_id)
+    formulario=GastoActualizarFecForm(datosFormulario,initial={
+        'fecha':huerto['fecha'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=GastoForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Gasto/actualizar/fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("gasto_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'gasto/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'gasto/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
+
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
 

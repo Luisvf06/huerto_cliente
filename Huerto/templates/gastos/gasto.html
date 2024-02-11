@@ -10,6 +10,14 @@
 <p>usuario: {{gasto.usuario.username}}</p>
 
 <br>
+<div>
+    <form action = "{% url 'gasto_put' gasto.id %}" method = "post"> 
+        {% csrf_token %}
+        <button class="btn btn-danger"  type="submit">
+        <span>Editar</span>
+        </button> 
+    </form>
+</div>
 <div class="mb-2">
     <form action="{% url 'gastos_eliminar' gasto.id %}" method="post">
         {% csrf_token %}

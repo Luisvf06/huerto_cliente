@@ -131,3 +131,40 @@ class BlogForm(forms.Form):
             widget=forms.Select,
             required=True
         )
+
+class HuertoActualizarUbiForm(forms.Form):
+    ubicacion=forms.CharField(label="ubic",required=True)
+class HuertoActualizarAciForm(forms.Form):
+    acidez=forms.FloatField(label="acidez",required=True)
+class HuertoActualizarSitForm(forms.Form):
+    sitio=forms.ChoiceField(widget=forms.Select(),required=True)
+class HuertoActualizarSusForm(forms.Form):
+    sustrato=forms.ChoiceField(widget=forms.Select(),required=True)
+class HuertoActualizarAboForm(forms.Form):
+    abonado=forms.BooleanField(required=False)
+class HuertoActualizarAreForm(forms.Form):
+    area=forms.FloatField(forms.Form)
+
+
+class GastoActualizarHerForm(forms.Form):
+    h=forms.FloatField(label="herr",required=True)
+
+class GastoActualizarFacForm(forms.Form):
+    f=forms.FloatField(label="Fac",required=True)
+
+class GastoActualizarImpForm(forms.Form):
+    i=forms.FloatField(label="impr",required=True)
+class GastoActualizarDesForm(forms.Form):
+    d=forms.CharField(label="desc",required=True)
+class GastoActualizarFecForm(forms.Form):
+    fe=forms.FloatField(label="fecha",required=True,widget=forms.SelectDateWidget())
+
+
+
+class BlogActualizarPubForm(forms.Form):
+    p=forms.ChoiceField(widget=forms.Select(),required=True)
+
+class BlogActualizarEtiForm(forms.Form):
+    e=forms.ChoiceField(label="etiqueta",required=True)
+class BlogActualizarFecForm(forms.Form):
+    f=forms.ChoiceField(label="fecha",required=True,widget=forms.SelectDateWidget())
