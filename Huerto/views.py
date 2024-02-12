@@ -749,7 +749,7 @@ def gasto_patch_descripcion(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/descripcoin'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'Gasto/actualizar/descripcion'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -874,6 +874,112 @@ def gasto_patch_fecha(request,huerto_id):
             print(f'Ocurrió un error: {err}')
             return mi_error_500(request)
     return render(request,'gasto/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
+
+def blog_patch_etiqueta(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_blog(huerto_id)
+    formulario=BlogActualizarEtiForm(datosFormulario,initial={
+        'fecetiqueta':huerto['etiqueta'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=BlogForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Blog/actualizar/etiqueta'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("blog_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'blog/actualizar_etiqueta.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'blog/actualizar_etiqueta.html',{"formulario":formulario,"huerto":huerto})
+
+def blog_patch_publicacion(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_blog(huerto_id)
+    formulario=BlogActualizarPubForm(datosFormulario,initial={
+        'fecetiqueta':huerto['etiqueta'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=BlogForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Blog/actualizar/publicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("blog_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'blog/actualizar_publicacion.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'blog/actualizar_publicacion.html',{"formulario":formulario,"huerto":huerto})
+
+def blog_patch_fecha(request,huerto_id):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    huerto=helper.obtener_blog(huerto_id)
+    formulario=BlogActualizarFecForm(datosFormulario,initial={
+        'fecetiqueta':huerto['etiqueta'],
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=BlogForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'Blog/actualizar/Fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
+            )
+            if (response.status_code==requests.codes.ok):
+                return redirect("blog_obtener")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un rror en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'blog/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'blog/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
+
 
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
