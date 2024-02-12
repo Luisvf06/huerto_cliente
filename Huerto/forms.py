@@ -142,8 +142,9 @@ class HuertoActualizarSusForm(forms.Form):
     sustrato=forms.ChoiceField(widget=forms.Select(),required=True)
 class HuertoActualizarAboForm(forms.Form):
     abonado=forms.BooleanField(required=False)
-class HuertoActualizarAreForm(forms.Form):
-    area=forms.FloatField(forms.Form)
+    '''
+class HuertoActualizarAreaForm(forms.Form):
+    area=forms.FloatField(forms.Form)'''
 
 
 class GastoActualizarHerForm(forms.Form):
