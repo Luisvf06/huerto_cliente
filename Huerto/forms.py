@@ -169,3 +169,17 @@ class BlogActualizarEtiForm(forms.Form):
     e=forms.ChoiceField(label="etiqueta",required=True)
 class BlogActualizarFecForm(forms.Form):
     f=forms.ChoiceField(label="fecha",required=True,widget=forms.SelectDateWidget())
+
+class RegistroForm(UserCreationForm):
+    roles =(
+            (1, 'usu'),
+            (2,'usu_premium'),
+    )
+    rol = forms.ChoiceField(choices=roles)
+    class Meta:
+        model=User
+        fields= ('username','email','password1','password2','rol')
+    
+class LoginForm(forms.Form):
+    usuario=forms.CharField()
+    password=forms.CharField(widget=forms.PasswordInput())

@@ -45,4 +45,7 @@ urlpatterns =[
     path('blog/actualizar/publicacion/<int:id_blog>',views.blog_patch_publicacion,name='blog_patch_publicacion'),
     path('blog/actualizar/fecha/<int:id_blog>',views.blog_patch_fecha,name='blog_patch_fecha'),
 
+    path('registrar',views.registrar,name='registrar'),
+    path('login',views.login,name='login'),
+    path('logout',views.logout,name='logout'),
 ]

@@ -1,0 +1,12 @@
+
+{% block contenido %}
+<form action="{% url 'login' %}" method="post">
+    {% load bootstrap5 %}
+    {% csrf_token %}
+
+
+
+    <button type="submit" class="btn btn-primary">Enviar</button>
+
+</form>
+{% endblock %}

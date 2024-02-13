@@ -980,6 +980,62 @@ def blog_patch_fecha(request,huerto_id):
             return mi_error_500(request)
     return render(request,'blog/actualizar_fecha.html',{"formulario":formulario,"huerto":huerto})
 
+def registrar(request):
+    if(request.method=="POST"):
+        try:
+            formulario=RegistroForm(request.POST)
+            if(formulario.is_valid()):
+                headers={
+                    "Content-Type":"application/json"
+                }
+                response =requests.post(versionServer+'registrar/usuario', headers=headers,
+                    data=json.dumps(formulario.cleaned_date)
+                )
+                if (response.status_code==requests.code.ok):
+                    return redirect('index')
+                else:
+                    print(response.status_code)
+                    response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la peticion: {http_err}')
+            if(response.status_code==400):
+                errores=response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request,'registro/registro.html',{'formulario':formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error:{err}')
+            return mi_error_500(request)
+    else:
+        formulario=RegistroForm()
+    return render(request,'registro/registro.html',{'formulario':formulario})
+
+def login(request):
+    if(request.method=="POST"):
+        formulario=LoginForm(request.POST)
+        try:
+            token_acceso=helper.obtener_token_session(formulario.data.get("usuario"),formulario.data.get("password"))
+            request.session["token"]=token_acceso
+            headers={"Authorization":"Bearer"+token_acceso}
+            response=requests.get(versionServer+'usuario/token/'+token_acceso,headers=headers)
+            usuario=response.json()
+            request.session["usuario"]=usuario
+            
+            return redirect("index")
+        except Exception as excepcion:
+            print(f'Hubo un error en la peticion {excepcion}')
+            formulario.add_error('usuario',excepcion)
+            formulario.add_error("password",excepcion)
+            return render(request,'registration/login.html',{"form":formulario})
+    else:
+        formulario=LoginForm()
+    return render(request,"registration/login.html",{"form":formulario})
+
+def logout(request):
+    del request.session['token']
+    return redirect('index')
 
 def mi_error_404(request,exception=None):
     return render(request, 'errores/404.html',None,None,404)
