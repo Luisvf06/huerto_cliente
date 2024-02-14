@@ -5,7 +5,7 @@ from pathlib import Path
 versionServer='http://127.0.0.1:4999/api/v1' 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 
 class helper:
     def crear_cabecera():
@@ -41,6 +41,7 @@ class helper:
         token_url='http://127.0.0.1:4999/oauth2/token/'
         data={'grant_type':'password',
             'username':usuario,
+            'password':password,
             'client_id':'huerto',
             'client_secret':'huerto_secret',
             }
@@ -50,3 +51,4 @@ class helper:
             return respuesta.get('access_token')
         else:
             raise Exception (respuesta.get("error_description"))
+        

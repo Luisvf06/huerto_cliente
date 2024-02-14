@@ -42,6 +42,7 @@ def obtener_respuesta(response):
         return response.text
 
 def index(request):
+    
     return render(request,'index.html')
 def crear_cabecera():
     return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
@@ -1028,10 +1029,10 @@ def login(request):
             print(f'Hubo un error en la peticion {excepcion}')
             formulario.add_error('usuario',excepcion)
             formulario.add_error("password",excepcion)
-            return render(request,'registration/login.html',{"form":formulario})
+            return render(request,'registro/login.html',{"form":formulario})
     else:
         formulario=LoginForm()
-    return render(request,"registration/login.html",{"form":formulario})
+    return render(request,"registro/login.html",{"form":formulario})
 
 def logout(request):
     del request.session['token']
