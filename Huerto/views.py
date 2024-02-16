@@ -373,7 +373,7 @@ def huerto_put(request,huerto_id):
                 datos["usuarios"]= request.POST.get("usuarios")
                 if(not 'abonado' in datos):
                     datos['abonado'] = "off"
-                response=requests.put(versionServer+'huerto/editar'+str(huerto_id),headers=headers,data=json.dumps(datos))
+                response=requests.put(versionServer+'/huerto/editar'+str(huerto_id),headers=headers,data=json.dumps(datos))
                 if(response.status_code==requests.codes.ok):
                     return redirect("huertos_lista_mejorada_api",huerto_id=huerto_id)
                 else:
@@ -421,7 +421,7 @@ def gasto_put(request,gasto_id):
                 # Asignar la fecha al formato dd/mm/yyyy
                 fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
 
-                response=requests.put(versionServer+'gasto/editar'+str(gasto_id),headers=headers,data=json.dumps(datos))
+                response=requests.put(versionServer+'/gasto/editar'+str(gasto_id),headers=headers,data=json.dumps(datos))
                 if(response.status_code==requests.codes.ok):
                     return redirect("gasto_lista_api",gasto_id=gasto_id)
                 else:
@@ -464,7 +464,7 @@ def blog_put(request,blog_id):
                 
                 # Asignar la fecha al formato dd/mm/yyyy
                 fecha_formatted = fecha_obj.strftime('%Y-%m-%d')
-                response=requests.put(versionServer+'blog/editar'+str(blog_id),headers=headers,data=json.dumps(datos))
+                response=requests.put(versionServer+'/blog/editar'+str(blog_id),headers=headers,data=json.dumps(datos))
                 if(response.status_code==requests.codes.ok):
                     return redirect("blog_lista_api",blog_id=blog_id)
                 else:
@@ -499,7 +499,7 @@ def huerto_patch_ubi(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/ubicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/ubicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -536,7 +536,7 @@ def huerto_patch_sit(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/sitio'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/sitio'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -572,7 +572,7 @@ def huerto_patch_sus(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/sustrato'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/sustrato'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -608,7 +608,7 @@ def huerto_patch_abo(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/abonado'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/abonado'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -644,7 +644,7 @@ def huerto_patch_are(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/area'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/area'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -680,7 +680,7 @@ def huerto_patch_aci(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'huerto/actualizar/acidez'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/huerto/actualizar/acidez'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("huerto_obtener")
@@ -715,7 +715,7 @@ def gasto_patch_factura(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/factura'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Gasto/actualizar/factura'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -750,7 +750,7 @@ def gasto_patch_descripcion(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/descripcion'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Gasto/actualizar/descripcion'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -785,7 +785,7 @@ def gasto_patch_herramienta(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/herramientas'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Gasto/actualizar/herramientas'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -820,7 +820,7 @@ def gasto_patch_imprevisto(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/imprevisto'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Gasto/actualizar/imprevisto'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -855,7 +855,7 @@ def gasto_patch_fecha(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Gasto/actualizar/fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Gasto/actualizar/fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("gasto_obtener")
@@ -890,7 +890,7 @@ def blog_patch_etiqueta(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Blog/actualizar/etiqueta'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Blog/actualizar/etiqueta'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("blog_obtener")
@@ -925,7 +925,7 @@ def blog_patch_publicacion(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Blog/actualizar/publicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Blog/actualizar/publicacion'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("blog_obtener")
@@ -960,7 +960,7 @@ def blog_patch_fecha(request,huerto_id):
             headers=crear_cabecera()
             datos=request.POST.copy()
             response=requests.patch(
-                versionServer+'Blog/actualizar/Fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
+                versionServer+'/Blog/actualizar/Fecha'+str(huerto_id),headers=headers,data=json.dumps(datos)
             )
             if (response.status_code==requests.codes.ok):
                 return redirect("blog_obtener")
@@ -989,11 +989,16 @@ def registrar(request):
                 headers={
                     "Content-Type":"application/json"
                 }
-                response =requests.post(versionServer+'registrar/usuario', headers=headers,
-                    data=json.dumps(formulario.cleaned_date)
+                response =requests.post(versionServer+'/registrar/usuario', headers=headers,
+                    data=json.dumps(formulario.cleaned_data)
                 )
-                if (response.status_code==requests.code.ok):
-                    return redirect('index')
+
+                if (response.status_code==requests.codes.ok):
+                    usuario=response.json()
+                    token_acceso=helper.obtener_token_session(formulario.cleaned_data.get("username"),formulario.cleaned_data.get("password1"))
+                    request.session["usuario"]=usuario
+                    request.session["token"]=token_acceso
+                    redirect("index")
                 else:
                     print(response.status_code)
                     response.raise_for_status()
@@ -1013,6 +1018,8 @@ def registrar(request):
         formulario=RegistroForm()
     return render(request,'registro/registro.html',{'formulario':formulario})
 
+
+
 def login(request):
     if(request.method=="POST"):
         formulario=LoginForm(request.POST)
@@ -1020,7 +1027,7 @@ def login(request):
             token_acceso=helper.obtener_token_session(formulario.data.get("usuario"),formulario.data.get("password"))
             request.session["token"]=token_acceso
             headers={"Authorization":"Bearer"+token_acceso}
-            response=requests.get(versionServer+'usuario/token/'+token_acceso,headers=headers)
+            response=requests.get(versionServer+'/usuario/token/'+token_acceso,headers=headers)
             usuario=response.json()
             request.session["usuario"]=usuario
             
