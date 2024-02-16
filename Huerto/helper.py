@@ -42,8 +42,8 @@ class helper:
         data={'grant_type':'password',
             'username':usuario,
             'password':password,
-            'client_id':'huerto',
-            'client_secret':'huerto_secret',
+            'client_id':'Huerto',
+            'client_secret':'Huerto_secret',
             }
         response=requests.post(token_url,data=data)
         respuesta=response.json()

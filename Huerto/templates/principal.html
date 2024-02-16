@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html>
-    <div><a href="{% url 'login' %}">Login</a></div>
-    <div><a href="{% url 'registrar' %}">Registrar</a></div>
+    <div class="ml-2">
+        {% if not request.session.token%}
+        <a class="btn btn-outline-warning" href="{% url 'login' %}">
+            Login
+        </a>
+        {% endif %}
+
+        {% if not request.session.token %}
+          <a class="btn btn-outline-warning" href="{% url 'registrar' %}">
+              Registrarse
+          </a>
+         {% endif %}
+
+         {% if request.session.token %}
+         <a class="btn btn-outline-warning" href="{% url 'logout' %}">
+             Desconectarse
+         </a>
+        {% endif %}
+      </div>
+
+    </div>
     <head>
         {% block link_css %}
 
