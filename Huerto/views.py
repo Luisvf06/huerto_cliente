@@ -11,9 +11,11 @@ from pathlib import Path
 from datetime import datetime
 from django.http import JsonResponse
 import xml.etree.ElementTree as ET
+from django.contrib.auth.decorators import login_required
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
+
 versionServer='http://127.0.0.1:4999/api/v1' 
 #Diapositiva 45 Respuesta 1: se puede mejorar incluyendo el v1 en una variable, de forma que todos accediesen a la misma y si se actualizara, sólo hubiera que cambiar el valor donde se declara.
 #Respuesta 2 se crea una nueva funcion que tenga en cuenta los dinstitos tipos de tipo de datos y se sustituye en la parte del response
@@ -45,7 +47,7 @@ def index(request):
     
     return render(request,'index.html')
 def crear_cabecera():
-    return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
+    return {'AuthorizatiFon': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
 }
 def huertos_lista_api(request):
     headers=crear_cabecera()
@@ -63,9 +65,19 @@ def huertos_lista_mejorada(request):
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
 
 def gastos_lista_mejorada(request):
-    headers=crear_cabecera()
-    response= requests.get(versionServer+'/gastos',headers=headers)
-    gastos=obtener_respuesta(response)
+    usuario = request.user.username
+    password = usuario.password  # Necesitas obtener la contraseña de alguna manera segura
+
+    # Obtener el token de sesión del usuario logueado
+    token = helper.obtener_token_session(usuario, password)
+
+    # Usar el token en la solicitud a la API
+    headers = {
+        'Authorization': f'Bearer {token}',
+        'Content-Type': 'application/json'
+    }
+    response = requests.get(versionServer + '/gastos', headers=headers)
+    gastos = obtener_respuesta(response)
     return render(request,'gastos/lista_mejorada.html',{'gastos_mostrar':gastos})
 
             
@@ -175,7 +187,7 @@ def blog_buscar_avanzada(request):
     else:
         formulario=BusquedaAvanzadaBlog(None)
         return render(request,'blog/busqueda_avanzada.html',{"formulario":formulario})
-
+@login_required()
 def huerto_crear(request):
     if(request.method=="POST"):
         try:
@@ -212,7 +224,7 @@ def huerto_crear(request):
     else:
         formulario = HuertoForm(None)
     return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
-
+@login_required()
 def gastos_crear(request):
     if request.method == "POST":
         print(request.POST)
@@ -259,6 +271,7 @@ def gastos_crear(request):
     else:
         formulario = GastoForm(None)
     return render(request, 'gastos/crear_gasto.html', {"formulario": formulario})
+@login_required()
 def blog_crear(request):
     if (request.method=="POST"):
         try:
@@ -635,7 +648,7 @@ def huerto_patch_are(request,huerto_id):
     if request.method=="POST":
         datosFormulario=request.POST
     huerto=helper.obtener_huerto(huerto_id)
-    formulario=HuertoActualizarAreForm(datosFormulario,initial={
+    formulario=HuertoActualizarAreaForm(datosFormulario,initial={
         'area':huerto['area'],
     })
     if (request.method=="POST"):
