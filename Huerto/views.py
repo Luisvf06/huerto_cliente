@@ -12,6 +12,19 @@ from datetime import datetime
 from django.http import JsonResponse
 import xml.etree.ElementTree as ET
 from django.contrib.auth.decorators import login_required
+
+from rest_framework import status
+from rest_framework.decorators import authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+import requests
+import datetime
+
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
@@ -187,7 +200,7 @@ def blog_buscar_avanzada(request):
     else:
         formulario=BusquedaAvanzadaBlog(None)
         return render(request,'blog/busqueda_avanzada.html',{"formulario":formulario})
-@login_required()
+
 def huerto_crear(request):
     if(request.method=="POST"):
         try:
