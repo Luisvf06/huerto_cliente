@@ -1,4 +1,4 @@
-curl -X POST "http://127.0.0.1:4999/oauth2/token/" -d "grant_type=password&username=admin&password=admin&client_id=Huerto&client_secret=Huerto_secret"
+curl -X POST "http://127.0.0.1:4999/oauth2/token/" -d "grant_type=password&username=admin&password=admin&client_id=aplicacion&client_secret=aplicacion_secret"
 curl -X POST "http://127.0.0.1:4999/oauth2/token/" -d "grant_type=password&username=luisvljl564562&password=Asqwzx12&client_id=Huerto&client_secret=Huerto_secret"
 
 Tarea 17 diciembre

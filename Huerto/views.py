@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework import status
 from rest_framework.decorators import authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.authentication import JWTAuthentication
+#from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -60,7 +60,7 @@ def index(request):
     
     return render(request,'index.html')
 def crear_cabecera():
-    return {'AuthorizatiFon': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
+    return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"
 }
 def huertos_lista_api(request):
     headers=crear_cabecera()
@@ -1077,3 +1077,15 @@ def mi_error_404(request,exception=None):
 #Páginas de Error
 def mi_error_500(request,exception=None):
     return render(request, 'errores/500.html',None,None,500)
+
+#Tarea final
+
+#Gabriela
+
+def plantas_estacion(request, estacion):
+    headers = crear_cabecera()
+    params = {'estacion': estacion}
+    response = requests.get(f'{versionServer}/plantas_estacion/{estacion}/', headers=headers, params=params)
+    plantas = obtener_respuesta(response)
+    return render(request, 'planta/lista_estacion.html', {'plantas_mostrar': plantas})
+

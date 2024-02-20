@@ -48,4 +48,9 @@ urlpatterns =[
     path('registrar',views.registrar,name='registrar'),
     path('login',views.login,name='login'),
     path('logout',views.logout,name='logout'),
+    
+#tarea final
+    #Gabriela
+    path('planta/recomendacion/<str:estacion>',views.plantas_estacion,name='recomendacion'),
+    
 ]

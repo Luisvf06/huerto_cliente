@@ -1,0 +1,7 @@
+{% extends 'principal.html' %}
+{% block contenido %}
+    <h1 class="display-3">Lista de plantas </h1>
+    {% for planta in plantas_mostrar%}
+    {%include "planta/planta.html" %}
+    {% endfor%}
+{% endblock %}
