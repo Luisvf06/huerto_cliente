@@ -53,4 +53,7 @@ urlpatterns =[
     #Gabriela
     path('planta/recomendacion/<str:estacion>',views.plantas_estacion,name='recomendacion'),
     
+    #Manuel
+    path('huerto/disponibles',views.huerto_disponible,name='huerto_disponible')
+    
 ]

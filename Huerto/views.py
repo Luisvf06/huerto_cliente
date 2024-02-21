@@ -210,6 +210,8 @@ def huerto_crear(request):
             datos["usuarios"]= request.POST.get("usuarios")
             if(not 'abonado' in datos):
                 datos['abonado'] = "off"
+            if(not 'disponible' in datos):
+                datos['disponible'] ="off"
             response=requests.post(
                 versionServer+'/huertos/crear',
                 headers=headers,
@@ -1081,7 +1083,6 @@ def mi_error_500(request,exception=None):
 #Tarea final
 
 #Gabriela
-
 def plantas_estacion(request, estacion):
     headers = crear_cabecera()
     params = {'estacion': estacion}
@@ -1089,3 +1090,10 @@ def plantas_estacion(request, estacion):
     plantas = obtener_respuesta(response)
     return render(request, 'planta/lista_estacion.html', {'plantas_mostrar': plantas})
 
+#Manuel
+
+def huerto_disponible(request):
+    headers=crear_cabecera()
+    response=requests.get(f'{versionServer}/huerto_disponible/', headers=headers)
+    huerto=obtener_respuesta(response)
+    return render(request, 'huerto/disponibilidad.html',{'huertos':huerto})

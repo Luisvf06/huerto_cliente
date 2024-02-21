@@ -3,10 +3,12 @@
 <script type="text/javascript" src="{% static 'javascript1.js' %}" ></script>
 {% endblock %}
 Huerto: {{huerto.id}}
+Localizacion: {{huerto.ubicacion}}
 Área: {{huerto.area}}
 Sitio: {{huerto.sitio}}
 ID: {{huerto.id}}
-Abono: {{huerto.abonado}}
+Disponible: {{huerto.disponible}}
+
 <br>
 <div>
     <form action = "{% url 'huerto_put' huerto.id %}" method = "post"> 

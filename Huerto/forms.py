@@ -78,7 +78,8 @@ class HuertoForm(forms.Form):#formulario de crear
     acidez=forms.FloatField(label='Acidez',required=True)
     
     abonado=forms.BooleanField(required=False)
-
+    disponible=forms.BooleanField(required=False)#tarea de manuel
+    
     ubicacion = forms.CharField(label="Ubicación",required=True,  widget=forms.TextInput(attrs={'placeholder': 'Ingrese la ubicación'}))#de momento no consigo hacer funcionar los widgets que encuentro para plainlocationfield
 
     

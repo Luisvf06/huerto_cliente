@@ -3,5 +3,7 @@
     <h1 class="display-3">Lista de plantas </h1>
     {% for planta in plantas_mostrar%}
     {%include "planta/planta.html" %}
+    {%empty%}
+        <h1>No hay datos</h1>
     {% endfor%}
 {% endblock %}
