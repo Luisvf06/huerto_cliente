@@ -1,0 +1,14 @@
+{% extends 'principal.html' %}
+{% block contenido %}
+    <h1 class="display-3">Huerto {{huerto_recolectable.id}}</h1>
+    {% for planta in huerto_recolectable.plantas_huerto %}
+    <h1>Planta: {{planta.nombre_comun}}</h1>
+    {% if planta.es_recolectable %}
+        <p>{{planta.recoleccion}}: La planta ya se puede recolectar</p>
+    {% else %}
+        <p>{{planta.recoleccion}}: La planta aún no se puede recolectar</p>
+    {% endif %}
+    {%empty%}
+        <p>No hay datos</p>
+{% endfor %}
+{% endblock %}

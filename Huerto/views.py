@@ -9,6 +9,8 @@ import environ
 import os
 from pathlib import Path
 from datetime import datetime
+import datetime
+from datetime import datetime as dt
 from django.http import JsonResponse
 import xml.etree.ElementTree as ET
 from django.contrib.auth.decorators import login_required
@@ -1099,3 +1101,28 @@ def huerto_disponible(request):
     response=requests.get(f'{versionServer}/huerto_disponible', headers=headers)
     huerto=obtener_respuesta(response)
     return render(request, 'huerto/disponibilidad.html',{'huertos':huerto})
+
+#Irene
+
+def huerto_recolectable(request, id_huerto):
+    headers = crear_cabecera()
+    hoy = dt.now().date()
+    mes_recoleccion = hoy.month
+    dia_recoleccion = hoy.day
+    dia_inicio = dia_recoleccion - 5
+    dia_fin = dia_recoleccion + 5
+
+
+    response = requests.get(f'{versionServer}/recolectable/{id_huerto}', headers=headers)
+    huerto = obtener_respuesta(response)
+
+    print(huerto)
+    contexto = {
+        'huerto_recolectable': huerto,
+        'dia_recoleccion': dia_recoleccion,
+        'mes_recoleccion': mes_recoleccion,
+        'hoy': hoy,
+        'dia_inicio': dia_inicio,
+        'dia_fin': dia_fin
+    }
+    return render(request, 'huerto/recolectable.html', contexto)

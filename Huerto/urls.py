@@ -54,6 +54,8 @@ urlpatterns =[
     path('planta/recomendacion/<str:estacion>',views.plantas_estacion,name='recomendacion'),
     
     #Manuel
-    path('huerto/disponibles',views.huerto_disponible,name='huerto_disponible')
+    path('huerto/disponibles',views.huerto_disponible,name='huerto_disponible'),
     
+    #Irene
+    path('huerto/recolectable/<int:id_huerto>',views.huerto_recolectable,name='huerto_recoletable'),
 ]
