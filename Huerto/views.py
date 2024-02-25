@@ -78,6 +78,7 @@ def huertos_lista_mejorada(request):
     return render(request,'huerto/lista_mejorada.html',{'huertos_mostrar':huertos})
 
 def gastos_lista_mejorada(request):
+    '''
     usuario = request.user.username
     password = usuario.password  # Necesitas obtener la contraseña de alguna manera segura
 
@@ -88,7 +89,8 @@ def gastos_lista_mejorada(request):
     headers = {
         'Authorization': f'Bearer {token}',
         'Content-Type': 'application/json'
-    }
+    }'''
+    headers=crear_cabecera()
     response = requests.get(versionServer + '/gastos', headers=headers)
     gastos = obtener_respuesta(response)
     return render(request,'gastos/lista_mejorada.html',{'gastos_mostrar':gastos})
@@ -1094,6 +1096,6 @@ def plantas_estacion(request, estacion):
 
 def huerto_disponible(request):
     headers=crear_cabecera()
-    response=requests.get(f'{versionServer}/huerto_disponible/', headers=headers)
+    response=requests.get(f'{versionServer}/huerto_disponible', headers=headers)
     huerto=obtener_respuesta(response)
     return render(request, 'huerto/disponibilidad.html',{'huertos':huerto})

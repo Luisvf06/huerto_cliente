@@ -1,7 +1,7 @@
 {% extends 'principal.html' %}
 {% block contenido %}
     <h1 class="display-3">Lista de huertos disponibles</h1>
-    {% for huerto in huertos_mostrar%}
+    {% for huerto in huertos%}
     <h1>Huerto {{huerto.id}}</h1>
     {%include "huerto/huerto.html" %}
     {% endfor%}

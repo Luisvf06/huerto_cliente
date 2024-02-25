@@ -12,12 +12,20 @@ class helper:
         return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"}
     def obtener_usuarios_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response=requests.get('http://127.0.0.1:4999/api/v1/usuario',headers=headers)#tengo que crearlo en servidor para que funcione
-        usuarios=response.json()
-        lista_usuarios=[("","Ninguno")]
-        for usuario in usuarios:
-            lista_usuarios.append((usuario["id"],usuario["username"]))
-        return lista_usuarios
+        response = requests.get('http://127.0.0.1:4999/api/v1/usuario', headers=headers)
+        try:
+            usuarios = response.json()
+            if not isinstance(usuarios, list):
+                print("La respuesta no es una lista: ", usuarios)
+                return []
+            lista_usuarios = [("", "Ninguno")]
+            for usuario in usuarios:
+                lista_usuarios.append((int(usuario["id"]), usuario["username"]))
+            return lista_usuarios
+        except ValueError as e:
+            print("Error decodificando JSON: ", e)
+            return []
+
     
     def obtener_huerto(id):
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
