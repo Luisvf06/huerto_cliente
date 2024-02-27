@@ -60,3 +60,9 @@ class helper:
         else:
             raise Exception (respuesta.get("error_description"))
         
+#Alberto
+    def obtener_Planta(id):
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response = requests.get(versionServer+'/planta/'+str(id))#esta apiview no es la de huertos, es otra
+        planta=response.json()
+        return planta

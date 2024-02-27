@@ -185,3 +185,21 @@ class RegistroForm(UserCreationForm):
 class LoginForm(forms.Form):
     usuario=forms.CharField()
     password=forms.CharField(widget=forms.PasswordInput())
+
+#Alberto
+from datetime import datetime  # Asegúrate de importar datetime
+
+class PlantaRegarForm(forms.Form):
+    fecha = forms.DateField(
+        label="Fecha de riego",
+        required=True,
+        widget=forms.SelectDateWidget()
+    )
+    planta = forms.IntegerField(required=True)
+    riego = forms.IntegerField(required=True)
+
+    def __init__(self, *args, **kwargs):
+        # Aquí estableces la fecha predeterminada al inicializar el formulario
+        super(PlantaRegarForm, self).__init__(*args, **kwargs)
+        self.fields['fecha'].initial = datetime.now().date()
+                                

@@ -243,7 +243,7 @@ def huerto_crear(request):
     else:
         formulario = HuertoForm(None)
     return render(request,'huerto/crear_huerto.html',{"formulario":formulario})
-@login_required()
+
 def gastos_crear(request):
     if request.method == "POST":
         print(request.POST)
@@ -1107,22 +1107,64 @@ def huerto_disponible(request):
 def huerto_recolectable(request, id_huerto):
     headers = crear_cabecera()
     hoy = dt.now().date()
-    mes_recoleccion = hoy.month
-    dia_recoleccion = hoy.day
-    dia_inicio = dia_recoleccion - 5
-    dia_fin = dia_recoleccion + 5
 
 
     response = requests.get(f'{versionServer}/recolectable/{id_huerto}', headers=headers)
     huerto = obtener_respuesta(response)
 
-    print(huerto)
     contexto = {
         'huerto_recolectable': huerto,
-        'dia_recoleccion': dia_recoleccion,
-        'mes_recoleccion': mes_recoleccion,
+
         'hoy': hoy,
-        'dia_inicio': dia_inicio,
-        'dia_fin': dia_fin
+
     }
     return render(request, 'huerto/recolectable.html', contexto)
+
+#Alberto
+
+def aviso_riego(request,id_usuario):
+    params={'usuario':id_usuario}
+    headers=crear_cabecera()
+    response= requests.get(f'{versionServer}/regable/{id_usuario}',headers=headers)
+    planta=obtener_respuesta(response)
+    return render(request,'planta/regable.html',{'plantas':planta})
+
+def riego_planta_crear(request):
+    if (request.method == "POST"):
+        try:
+            formulario=PlantaRegarForm(request.POST)
+            headers= crear_cabecera()
+            datos=formulario.data.copy()
+            datos["fecha"]=str(datetime.date(year=int(datos['fecha_year']),
+                                                            month=int(datos['fecha_month']),
+                                                            day=int(datos['fecha_day'])))
+            datos["planta"]=request.POST.getlist("planta")
+            response = requests.post(
+                    'http://127.0.0.1:4999/api/v1/Planta/regar',
+                    headers=headers,
+                    data=json.dumps(datos)
+                )
+            if(response.status_code == requests.codes.ok):
+                return redirect("huertos_lista_mejorada")
+            else:
+                print(response.status_code)
+                response.raise_for_status()
+        except HTTPError as http_err:
+            print(f'Hubo un error en la petición: {http_err}')
+            if(response.status_code == 400):
+                errores = response.json()
+                for error in errores:
+                    formulario.add_error(error,errores[error])
+                return render(request, 
+                            'plantaRiego/create.html',
+                            {"formulario":formulario})
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+        
+    else:
+            formulario = PlantaRegarForm(None)
+    return render(request, 'plantaRiego/create.html',{"formulario":formulario})
+

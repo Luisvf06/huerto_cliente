@@ -1,0 +1,15 @@
+{% extends 'principal.html' %}
+{% load static %} 
+{% block contenido %}
+<script src="{% static 'javascript/riego.js' %}"></script>
+<h1 class="display-3">Lista de plantas</h1>
+{% for planta in plantas %}
+<div class="planta" data-regar="{{ planta.regar }}">
+    Último riego: {{ planta.fecha }}
+    Planta: {{ planta.nombre_comun }}
+
+</div>
+{% empty %}
+<h1>No hay datos</h1>
+{% endfor %}
+{% endblock %}
