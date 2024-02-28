@@ -1168,3 +1168,9 @@ def riego_planta_crear(request):
             formulario = PlantaRegarForm(None)
     return render(request, 'plantaRiego/create.html',{"formulario":formulario})
 
+#Iván
+def huerto_peligrosidad(request,id_huerto):
+    headers=crear_cabecera()
+    response = requests.get(versionServer+'/huerto_plaga/'+id_huerto,headers=headers)
+    huerto=obtener_respuesta(response)
+    return render(request,'huerto/peligrosidad.html',{'huertos_mostrar':huerto})

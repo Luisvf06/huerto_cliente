@@ -63,5 +63,8 @@ urlpatterns =[
 
     #Alberto
     path('huerto/regar/<int:id_usuario>',views.aviso_riego,name='aviso_riego'),
-    path('planta/regada',views.riego_planta_crear,name='riego_planta_crear')#con esto quiero que al crear un neuvo evento de riego se resetee la fecha
+    path('planta/regada',views.riego_planta_crear,name='riego_planta_crear'),#con esto quiero que al crear un neuvo evento de riego se resetee la fecha
+
+    #Ivan
+    path('huerto/peligrosidad/<int:id_huerto>',views.huerto_peligrosidad,name='huerto_peligrosidad'),
 ]
