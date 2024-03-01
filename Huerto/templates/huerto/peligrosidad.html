@@ -1,0 +1,20 @@
+{% block cabecera_extra %}
+{% load static %}
+<script type="text/javascript" src="{% static 'javascript1.js' %}"></script>
+{% endblock %}
+
+<h2>Huerto: {{ huertos_mostrar.id }}</h2>
+<p>Localización: {{ huertos_mostrar.ubicacion }}</p>
+<p>Área: {{ huertos_mostrar.area }}</p>
+<p>Sitio: {{ huertos_mostrar.sitio}}</p>
+<p>ID: {{ huertos_mostrar.id }}</p>
+<p>Disponible: {{ huertos_mostrar.disponible|yesno:"Sí,No" }}</p>
+
+<h3>Plantas en el huerto:</h3>
+{% for planta in huertos_mostrar.plantas_huerto %}
+    <div>
+        <h4>{{ planta.nombre_comun }}</h4>
+        <p>Tipo: {{ planta.tipo }}</p>
+        <p>Cantidad de tipos de plagas distintas: {{ planta.cantidad_tipos_plagas }}</p>
+    </div>
+{% endfor %}
