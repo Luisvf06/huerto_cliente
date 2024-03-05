@@ -1,6 +1,6 @@
 {% block cabecera_extra %}
-{% load static %}
-<script type="text/javascript" src="{% static 'javascript1.js' %}"></script>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'javascript1.js' %}"></script>
 {% endblock %}
 
 <h2>Huerto: {{ huertos_mostrar.id }}</h2>
@@ -18,3 +18,4 @@
         <p>Cantidad de tipos de plagas distintas: {{ planta.cantidad_tipos_plagas }}</p>
     </div>
 {% endfor %}
+<p><b>Total de plagas en el huerto: {{ huertos_mostrar.total_plagas }}</b></p>

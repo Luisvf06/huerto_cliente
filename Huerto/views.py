@@ -1106,7 +1106,7 @@ def huerto_disponible(request):
 
 def huerto_recolectable(request, id_huerto):
     headers = crear_cabecera()
-    hoy = dt.now().date()
+    hoy = dt.now().date().strftime('%d-%m-%y')
 
 
     response = requests.get(f'{versionServer}/recolectable/{id_huerto}', headers=headers)
