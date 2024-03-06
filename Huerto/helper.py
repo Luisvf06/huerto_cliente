@@ -10,6 +10,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 class helper:
     def crear_cabecera():
         return {'Authorization': 'Bearer ' + env("CLAVE_ADMINISTRADOR"),"Content-Type": "application/json"}
+    
     def obtener_usuarios_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
         response = requests.get('http://127.0.0.1:4999/api/v1/usuario', headers=headers)
@@ -66,3 +67,40 @@ class helper:
         response = requests.get(versionServer+'/planta/'+str(id))#esta apiview no es la de huertos, es otra
         planta=response.json()
         return planta
+    def obtener_plantas_select():
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response = requests.get('http://127.0.0.1:4999/api/v1/plantas', headers=headers)
+        try:
+            plantas = response.json()
+            if not isinstance(plantas, list):
+                print("La respuesta no es una lista: ", plantas)
+                return []
+            lista_plantas = [("", "Ninguno")]
+            for planta in plantas:
+                lista_plantas.append((int(planta["id"]),planta["id"]))
+            return lista_plantas
+        except ValueError as e:
+            print("Error decodificando JSON: ", e)
+            return []
+    
+    def obtener_riegos_select():
+        headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
+        response = requests.get('http://127.0.0.1:4999/api/v1/riegos', headers=headers)
+        try:
+            riegos = response.json()
+            if not isinstance(riegos, list):
+                print("La respuesta no es una lista: ", riegos)
+                return []
+            lista_riegos = [("", "Ninguno")]
+            for riego in riegos:
+                lista_riegos.append((int(riego["id"]), riego["id"]))
+            return lista_riegos
+        except ValueError as e:
+            print("Error decodificando JSON: ", e)
+            return []
+    
+    def obtener_Riego(id):
+        headers={'Authorization': 'Bearer'+ env('CLAVE_ADMINISTRADOR')}
+        response = requests.get(versionServer+'/riego/'+str(id))
+        riego=response.json()
+        return riego

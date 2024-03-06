@@ -187,7 +187,7 @@ class LoginForm(forms.Form):
     password=forms.CharField(widget=forms.PasswordInput())
 
 #Alberto
-from datetime import datetime  # Asegúrate de importar datetime
+from datetime import datetime 
 
 class PlantaRegarForm(forms.Form):
     fecha = forms.DateField(
@@ -195,11 +195,35 @@ class PlantaRegarForm(forms.Form):
         required=True,
         widget=forms.SelectDateWidget()
     )
-    planta = forms.IntegerField(required=True)
-    riego = forms.IntegerField(required=True)
+
 
     def __init__(self, *args, **kwargs):
-        # Aquí estableces la fecha predeterminada al inicializar el formulario
         super(PlantaRegarForm, self).__init__(*args, **kwargs)
+        planta=helper.obtener_plantas_select()
+        riego=helper.obtener_riegos_select()
+        
+        self.fields["planta"]=forms.ChoiceField(
+            choices=planta, widget=forms.Select,required=True
+        )
+        self.fields["riego"]=forms.ChoiceField(
+            choices=riego,widget=forms.Select,required=True
+        )
         self.fields['fecha'].initial = datetime.now().date()
-                                
+'''
+class GastoForm(forms.Form): #formulario crear
+    herramientas=forms.FloatField(label='Herramientas',required=True)
+    
+    facturas=forms.FloatField(label='Facturas',required=True)
+    
+    imprevistos=forms.FloatField(label='Imprevistos',required=True)
+    Descripcion=forms.CharField(label='Descripción',required=True)
+    fecha=forms.DateField(label='Fecha',required=False,initial=datetime.date.today,widget=forms.SelectDateWidget(years=range(1990,2024)))
+
+    def __init__(self,*args,**kwargs):
+        super(GastoForm,self).__init__(*args,**kwargs)
+        usuario=helper.obtener_usuarios_select()
+        self.fields["usuario"] = forms.ChoiceField(
+            choices=usuario, 
+            widget=forms.Select, 
+            required=True)
+'''
