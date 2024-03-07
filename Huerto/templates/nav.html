@@ -49,10 +49,9 @@
     <div><a href="{% url 'huerto_recoletable' 2%}">Huertos recolectable</a></div>
     
     <h3>Alberto</h3>
-    <span>solo se muestra si el usuario está logueado</span>
-    {% if user.is_authenticated %}
+
     <div><a href="{% url 'aviso_riego' 1%}">Plantas que necesitan ser regadas</a></div>
-    {%endif%}
+
     <div><a href="{% url 'riego_planta_crear' %}">Crear riego</a></div>
     
     <h3>Iván</h3>

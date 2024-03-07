@@ -1135,15 +1135,9 @@ def riego_planta_crear(request):
             formulario=PlantaRegarForm(request.POST)
             headers= crear_cabecera()
             datos=formulario.data.copy()
-            datos["fecha"]=str(datetime.date(year=int(datos['fecha_year']),
-                                                            month=int(datos['fecha_month']),
-                                                            day=int(datos['fecha_day'])))
-            datos["planta"]=request.POST.getlist("planta")
-            response = requests.post(
-                    'http://127.0.0.1:4999/api/v1/Planta/regar',
-                    headers=headers,
-                    data=json.dumps(datos)
-                )
+            datos["fecha"]=str(datetime.date())
+            datos["planta"]=request.POST.get("planta")
+            response = requests.post('http://127.0.0.1:4999/api/v1/Planta/regar',headers=headers, data=json.dumps(datos))
             if(response.status_code == requests.codes.ok):
                 return redirect("huertos_lista_mejorada")
             else:

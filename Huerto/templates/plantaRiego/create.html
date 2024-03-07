@@ -40,7 +40,7 @@
     
     <div class="mb-4">
         <label for ="{{formulario.fecha.id_for_label}}"class="form-label">{{formulario.fecha.label}}: </label>
-        <input name="{{formulario.fecha.html_name}}"type="text" class="form-control {% if formulario.fecha.errors %} is-invalid{%elif formulario.is_bound %}is-valid{%endif%}" id="{{formulario.fecha.id_for_label}}"maxlength="{{formulario.fecha.field.max_length}}"{% if formulario.fecha.field.required %}
+        <input name="{{formulario.fecha.html_name}}"type="date" class="form-control {% if formulario.fecha.errors %} is-invalid{%elif formulario.is_bound %}is-valid{%endif%}" id="{{formulario.fecha.id_for_label}}"maxlength="{{formulario.fecha.field.max_length}}"{% if formulario.fecha.field.required %}
             required
         {%endif%}
         value="{% spaceless %}
