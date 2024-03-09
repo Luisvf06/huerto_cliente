@@ -187,8 +187,9 @@ class LoginForm(forms.Form):
     password=forms.CharField(widget=forms.PasswordInput())
 
 #Alberto
-from datetime import datetime 
-
+from datetime import datetime
+from django.utils import timezone
+#formulario para crear un evento riego y luego poder actualizar con un patch la fecha de ultimo riego
 class PlantaRegarForm(forms.Form):
     fecha = forms.DateField(
         label="Fecha de riego",
@@ -209,21 +210,3 @@ class PlantaRegarForm(forms.Form):
             choices=riego,widget=forms.Select,required=True
         )
         self.fields['fecha'].initial = datetime.now().date()
-'''
-class GastoForm(forms.Form): #formulario crear
-    herramientas=forms.FloatField(label='Herramientas',required=True)
-    
-    facturas=forms.FloatField(label='Facturas',required=True)
-    
-    imprevistos=forms.FloatField(label='Imprevistos',required=True)
-    Descripcion=forms.CharField(label='Descripción',required=True)
-    fecha=forms.DateField(label='Fecha',required=False,initial=datetime.date.today,widget=forms.SelectDateWidget(years=range(1990,2024)))
-
-    def __init__(self,*args,**kwargs):
-        super(GastoForm,self).__init__(*args,**kwargs)
-        usuario=helper.obtener_usuarios_select()
-        self.fields["usuario"] = forms.ChoiceField(
-            choices=usuario, 
-            widget=forms.Select, 
-            required=True)
-'''

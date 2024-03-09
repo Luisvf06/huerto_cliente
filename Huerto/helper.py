@@ -64,7 +64,7 @@ class helper:
 #Alberto
     def obtener_Planta(id):
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response = requests.get(versionServer+'/planta/'+str(id))#esta apiview no es la de huertos, es otra
+        response = requests.get(versionServer+'/planta/'+str(id),headers=headers)#esta apiview no es la de huertos, es otra
         planta=response.json()
         return planta
     def obtener_plantas_select():
@@ -82,7 +82,7 @@ class helper:
         except ValueError as e:
             print("Error decodificando JSON: ", e)
             return []
-    
+
     def obtener_riegos_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
         response = requests.get('http://127.0.0.1:4999/api/v1/riegos', headers=headers)
