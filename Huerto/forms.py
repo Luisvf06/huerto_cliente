@@ -210,3 +210,6 @@ class PlantaRegarForm(forms.Form):
             choices=riego,widget=forms.Select,required=True
         )
         self.fields['fecha'].initial = datetime.now().date()
+
+class PlantaRiegoActualizarForm(forms.Form):
+    fecha=forms.DateField(label="Última fecha de riego",required=True)

@@ -31,7 +31,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
 env = environ.Env()
 
-versionServer='http://127.0.0.1:4999/api/v1' 
+versionServer='https://luisvf3.pythonanywhere.com/api/v1' 
 #Diapositiva 45 Respuesta 1: se puede mejorar incluyendo el v1 en una variable, de forma que todos accediesen a la misma y si se actualizara, sólo hubiera que cambiar el valor donde se declara.
 #Respuesta 2 se crea una nueva funcion que tenga en cuenta los dinstitos tipos de tipo de datos y se sustituye en la parte del response
 # Create your views here.
@@ -1139,7 +1139,7 @@ def riego_planta_crear(request):
             datos["fecha"] = fecha_actual
             datos["planta"]=request.POST.get("planta")
             datos["riego"]=request.POST.get("riego")
-            response = requests.post('http://127.0.0.1:4999/api/v1/Planta/regar',headers=headers, data=json.dumps(datos))
+            response = requests.post(versionServer+'/Planta/regar',headers=headers, data=json.dumps(datos))
             if(response.status_code == requests.codes.ok):
                 return redirect("huertos_lista_mejorada")
             else:
@@ -1163,7 +1163,32 @@ def riego_planta_crear(request):
     else:
             formulario = PlantaRegarForm(None)
     return render(request, 'plantaRiego/create.html',{"formulario":formulario})
-
+    #patch para actualizar la fecha de riego una vez se ha hecho
+def actualizar_riego(request,id_plantariego):
+    datosFormulario=None
+    if request.method=="POST":
+        datosFormulario=request.POST
+    nuevaFecha=helper.obtener_eventoRiego(id_plantariego)
+    formulario= PlantaRiegoActualizarForm(datosFormulario,initial={
+        'nombre':nuevaFecha['fecha']
+    })
+    if (request.method=="POST"):
+        try:
+            formulario=PlantaRiegoActualizarForm(request.POST)
+            headers=crear_cabecera()
+            datos=request.POST.copy()
+            response=requests.patch(
+                versionServer+'actualizar/fecha/'+str(id_plantariego),
+                data=json.dumps(datos))
+            
+            if (response.status_code==requests.codes.ok):
+                return redirect("riego_planta_crear",riego_id=id_plantariego)
+            else:
+                return mi_error_500(request)
+        except Exception as err:
+            print(f'Ocurrió un error: {err}')
+            return mi_error_500(request)
+    return render(request,'plantaRiego/actualizar_fecha.html',{"formulario":formulario,"fecha":nuevaFecha})
 #Iván
 def huerto_peligrosidad(request,id_huerto):
     headers=crear_cabecera()

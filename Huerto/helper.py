@@ -2,7 +2,7 @@ import requests
 import environ
 import os
 from pathlib import Path
-versionServer='http://127.0.0.1:4999/api/v1' 
+versionServer='https://luisvf3.pythonanywhere.com/api/v1' 
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'),True)
@@ -13,7 +13,7 @@ class helper:
     
     def obtener_usuarios_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response = requests.get('http://127.0.0.1:4999/api/v1/usuario', headers=headers)
+        response = requests.get(versionServer+'/usuario', headers=headers)
         try:
             usuarios = response.json()
             if not isinstance(usuarios, list):
@@ -30,7 +30,7 @@ class helper:
     
     def obtener_huerto(id):
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response = requests.get('http://127.0.0.1:4999/api/v1/huerto/'+str(id))#esta apiview no es la de huertos, es otra
+        response = requests.get(versionServer+'/huerto/'+str(id))#esta apiview no es la de huertos, es otra
         huerto=response.json()
         return huerto
     
@@ -47,7 +47,7 @@ class helper:
         return blog
     
     def obtener_token_session(usuario,password):
-        token_url='http://127.0.0.1:4999/oauth2/token/'
+        token_url=versionServer+ '/oauth2/token/'
         data={'grant_type':'password',
             'username':usuario,
             'password':password,
@@ -69,7 +69,7 @@ class helper:
         return planta
     def obtener_plantas_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response = requests.get('http://127.0.0.1:4999/api/v1/plantas', headers=headers)
+        response = requests.get(versionServer+'/plantas', headers=headers)
         try:
             plantas = response.json()
             if not isinstance(plantas, list):
@@ -85,7 +85,7 @@ class helper:
 
     def obtener_riegos_select():
         headers={'Authorization': 'Bearer '+env("CLAVE_ADMINISTRADOR")}
-        response = requests.get('http://127.0.0.1:4999/api/v1/riegos', headers=headers)
+        response = requests.get(versionServer+'/riegos', headers=headers)
         try:
             riegos = response.json()
             if not isinstance(riegos, list):
@@ -102,5 +102,11 @@ class helper:
     def obtener_Riego(id):
         headers={'Authorization': 'Bearer'+ env('CLAVE_ADMINISTRADOR')}
         response = requests.get(versionServer+'/riego/'+str(id))
+        riego=response.json()
+        return riego
+    
+    def obtener_PlantaRiego(id):
+        headers={'Authorization': 'Bearer' + env('CLAVE_ADMINISTRADOR')}
+        response = requests.get(versionServer +'plantariego'+str(id))
         riego=response.json()
         return riego
