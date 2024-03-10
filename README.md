@@ -1,99 +1,30 @@
 curl -X POST "http://127.0.0.1:4999/oauth2/token/" -d "grant_type=password&username=admin&password=admin&client_id=aplicacion&client_secret=aplicacion_secret"
 curl -X POST "http://127.0.0.1:4999/oauth2/token/" -d "grant_type=password&username=luisvljl564562&password=Asqwzx12&client_id=Huerto&client_secret=Huerto_secret"
 
-Tarea 17 diciembre
-
-Parte 4
-6 crud: huerto, gasto, blog,  incidencia, fruto y tratamiento
-También hice un crud de usuario, pero como con la parte de login y permisios cambió, lo he dejaod comentado.
-
-Los CRUD empiezan en la linea 141 de views.py
-Huerto:
-    Crear: funciona
-        Validacion: 
-            La latitud debe estar entre -90 y 90 y la logitud entre 180 y -180
-            Los campos de ubicación y sitio tienen que tener una opcion marcada
-            Area debe ser un nº entero o flotante y mayor que 0
-            Acidez debe estar entre 0 y 14 sin ser igual al extremo del rango
-    Editar: funciona
-    Borrar: funciona
-    Busqueda avanzada: no funciona
-        Widget: checkboxselectmultiple()
-            CheckboxInput()
-
-Gastos
-        Crear: funciona
-            Validacion: 
-                herramientas, facturas e imprevistos deben ser float, fecha debe ser hoy o anterior a hoy
-        Editar: funciona
-        Borrar: borra pero no pregunta
-        Busqueda avanzada: funciona
-            Widget: checkboxselectmultiple(), forms.SelecDateWidget(), forms.HiddenInput()
-
-Blog
-    Crear: funciona
-        Validacion: fecha solo puede ser hoy, etiqueta tiene ser estar en mayúsculas y tener al menos 2 caracteres
-    Editar: no funciona
-    Borrar: funciona
-    Busqueda avanzada: funciona
-        Widget: forms.CheckboxSelectMultiple(),
-        forms.TextInput(attrs={'placeholder':'Etiqueta'})
-        forms.DateInput()
-        forms.Textarea
+Gabriela: vista Recomendacion plantas por estacion
+    Creo y uso el campo epoca_siembra, accedo al mes para ver la estacion con un if en la template y hacer que se muetre el nombre de las plantas que tienen esa fecha establecida
+    Hecha: he creado 4 url uno para cada estación y cada uno devuelve las plantas de esa estación
 
 
-Incidencia
-    Crear funciona
-        Validacion descripcion entre 10 y 2000 cracteres fecha presente o pasada
-    Editar funciona
-    Borrar funciona
-    Busqueda Avanzada no funciona
-        Widget ninguno nuevo
-
-Fruto
-    Crear funciona
-        Validacion no existe otro fruto con ese nombre, el nombre solo puede tener letras y la inicial ser mayúscula. En busqueda avanzada planta debe ser entero
-    Editar funciona
-    Borrar funciona
-    Busqueda Avanzada no funciona
-        Widget
+Manuel: diferenciar  huertos disponibles y no y poner una lista con los huertos disponibles
+    Creo un atributo de tipo booleanfield para el modelo Huerto con el nombre "disponible" si es true se mostrará y si no no. El filtro para mostrar si sí o no se pone en la template con |yesno:"Sí,No"
 
 
-Tratamiento
-    Crear funciona 
-        Validacion los campos deben tener una longitud entre dos rangos
-    Editar funciona
-    Borrar borra
-    Busqueda Avanzada funciona
-        Widget
+Irene: en un huerto que aparezca cuando recolectar cada planta
+    en el modelo planta tengo el campo recoleccion como datefield. Accedo a las plantas de un huerto en concreto y comparo las fechas del campo y la actual, si coinciden con una diferencia de más menos x días, se considerarán recolectables y se mostrarán, si no no.
+Alvaro:Imagenes de las plantas 
+    No funciona
 
+Alberto: Aviso de cuando regar con alert
+    acceder a la tabla intermedia de planta_regada, ver la fecha de riego, ver la fecha actual, si pasa de X tiempo, que salte el alert. 
+    Para cada usuario, comprueba las plantas que tiene y la última fecha en las que fueron regadas. Al entrar en la funcionalidad, si hace más de x días que fueron regadas (comparando la fecha actual con la del registro), saltará un alert diciendo que alguna planta debe ser regada, y en el html se mostrarán en rojo las plantas que deben regarse
+Ivan: plagas posibles de un huerto en funcion de sus plantas
+    Tengo que modificar la relacion planta-plaga para que sea n-m, crear una intermedia y en esa poner el total de plagas por planta, acceder a ella desde huerto para ver el total de plagas que puede tener ese huerto. El calculo de las plagas diferentes por huerto lo hago en la api con un conjunto 
 
-PARTE 5 SESIONES Y AUTENTICACIÓN
-Tengo dos tipos de usuario el normal y el premium, la diferencia entre ambos son los permisos que tienen asignados. El normal tiene permiso para ver todo y añadir un par de elementos y el premium tiene permiso de vista, añadir y cambiar
+Elvis: Hacer login de Google
+No funciona
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-Parte del crud usuario que quité 
-'''
-    path('usuario/create/',views.usuario_create,name='usuario_create'),
-    path('usuario/usuarios/',views.usuario_lista,name='usuario_lista'),
-    path('usuario/editar/<int:id_usuario>',views.usuario_editar,name='usuario_editar'),
-    path('usuario/eliminar/<int:usuario_id>',views.usuario_eliminar,name='usuario_eliminar'),
-    path('usuario/buscar',views.usuario_buscar,name='usuario_buscar'),
-''',
-
-<div><a href="{% url 'usuario_create' %}">Crear usuario</a></div>
-    <div><a href="{% url 'usuario_lista' %}">Lista de usuarios</a></div>
-    <div><a href="{% url 'usuario_buscar'%}">Buscar usuario</a></div>
