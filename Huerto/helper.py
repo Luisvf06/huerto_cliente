@@ -107,6 +107,6 @@ class helper:
     
     def obtener_PlantaRiego(id):
         headers={'Authorization': 'Bearer' + env('CLAVE_ADMINISTRADOR')}
-        response = requests.get(versionServer +'plantariego'+str(id))
+        response = requests.get(versionServer +'/plantariego'+str(id))
         riego=response.json()
         return riego
